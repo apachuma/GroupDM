@@ -852,123 +852,107 @@
 
     /* ================================================================
        SECCIÓN 7: UNIDADES DE NEGOCIO
-       Layout: una unidad por fila, foto y contenido alternados
-       Fila impar  → foto izquierda, contenido derecha
-       Fila par    → contenido izquierda, foto derecha  (.unit-row.reverse)
        ================================================================ */
-    .units-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+    /* CAMBIA AQUÍ LAS UNIDADES DE NEGOCIO Y SUS LOGOS ============ */
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
       margin-top: 52px;
     }
-    /* Fila de una unidad: foto + contenido lado a lado */
-    .unit-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 420px;
-      border-bottom: 1px solid #D9CDB8;
-    }
-    .unit-row:first-child { border-top: 1px solid #D9CDB8; }
-
-    /* Foto de la unidad */
-    .unit-photo {
-      position: relative;
-      overflow: hidden;
-      background: var(--gdm-navy-mid);
-      min-height: 320px;
-    }
-    .unit-photo img.unit-bg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .6s ease;
-    }
-    .unit-row:hover .unit-photo img.unit-bg { transform: scale(1.04); }
-    /* Overlay suave sobre la foto */
-    .unit-photo::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,26,48,.18);
-    }
-    /* En fila par (reverse): foto va a la derecha */
-    .unit-row.reverse .unit-photo { order: 2; }
-    .unit-row.reverse .unit-body  { order: 1; }
-
-    /* Contenido de la unidad */
-    .unit-body {
-      padding: 48px 52px;
+    .unit-card {
+      border: 1px solid #D9CDB8;
+      border-radius: var(--radius-sm);
+      padding: 30px 26px;
+      background: linear-gradient(180deg, rgba(0,45,81,.04), transparent);
+      transition: transform .4s, border-color .4s, box-shadow .4s;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      background: var(--gdm-cream);
+      min-height: 260px;
+    }
+    .unit-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gdm-gold-dark);
+      box-shadow: 0 18px 40px rgba(0,45,81,.1);
     }
     .unit-num {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 2px;
       color: var(--gdm-gold-dark);
-      margin-bottom: 10px;
+      opacity: .8;
+      margin-bottom: 12px;
     }
-    .unit-card h3,
-    .unit-body h3 {
-      font-weight: 700;
-      font-size: clamp(22px, 2.4vw, 30px);
+    .unit-card h3 {
+      font-weight: 600;
+      font-size: 22px;
       color: var(--gdm-ink);
       margin-bottom: 14px;
-      line-height: 1.2;
     }
-    .unit-desc {
-      font-size: 15.5px;
-      line-height: 1.72;
-      color: var(--gdm-text-mid);
-      font-weight: 300;
-      margin-bottom: 20px;
-      max-width: 48ch;
-    }
-    /* Logos de marcas */
+
+    /* Logos de marcas dentro de la unidad */
     .unit-logos {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 22px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
     .unit-logos img {
-      height: 28px;
+      height: 32px;
       width: auto;
       object-fit: contain;
+      filter: none;
     }
-    /* Íconos de redes sociales SVG */
+
+    /* Tags de marcas (texto, cuando no hay logos) */
+    .unit-brands {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+    .unit-brands span {
+      font-size: 11.5px;
+      border: 1px solid #D9CDB8;
+      color: var(--gdm-text-mid);
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Íconos de redes sociales */
     .unit-socials {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+      gap: 7px;
+      margin-top: 4px;
     }
     .unit-socials a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1px solid #D9CDB8;
-      color: var(--gdm-text-mid);
-      transition: background .25s, color .25s, border-color .25s, transform .2s;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--gdm-gold-dark);
+      border: 1px solid #E4D8C4;
+      border-radius: var(--radius-pill);
+      padding: 4px 9px;
+      transition: background .25s, color .25s, border-color .25s;
     }
     .unit-socials a:hover {
       background: var(--gdm-navy);
       color: var(--gdm-white);
       border-color: var(--gdm-navy);
-      transform: translateY(-2px);
     }
-    .unit-socials a svg { width: 16px; height: 16px; }
-    /* Ocultar íconos sin enlace real */
-    .unit-socials a[href="#"] { display: none; }
+    .unit-link {
+      margin-top: auto;
+      padding-top: 18px;
+      display: inline-flex;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      color: var(--gdm-gold-dark);
+      transition: gap .3s;
+    }
+    .unit-link:hover { gap: 12px; }
 
     /* ================================================================
        SECCIÓN 8: RECONOCIMIENTOS
@@ -1292,11 +1276,8 @@
       /* Gobernanza: columna única */
       .gov-grid { grid-template-columns: 1fr; gap: 32px; }
 
-      /* Unidades de negocio: colapsar a columna única */
-      .unit-row { grid-template-columns: 1fr; }
-      .unit-row.reverse .unit-photo { order: 0; }
-      .unit-row.reverse .unit-body  { order: 1; }
-      .unit-body { padding: 32px 24px; }
+      /* Unidades de negocio: 2 columnas */
+      .units-grid { grid-template-columns: repeat(2, 1fr); }
 
       /* Reconocimientos: 2 columnas */
       .awards-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1332,11 +1313,131 @@
       .btn-intranet .btn-text { display: none; }
       .btn-intranet { padding: 9px 11px; }
 
-      /* Awards: columna única en móvil */
-      .awards-grid { grid-template-columns: 1fr !important; }
+      /* Unidades: columna única */
+      .units-grid { grid-template-columns: 1fr; }
 
       /* Footer: columna única */
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+
+      /* Reconocimientos: columna única */
+      .awards-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ================================================================
+       SECCIÓN 7: NUESTRAS EMPRESAS – Carrusel de logos
+       VELOCIDAD: cambia --carousel-speed (segundos) para ir más
+       rápido o más lento. Valor actual: 28s para 7 tarjetas.
+       ================================================================ */
+    :root { --carousel-speed: 28s; }
+
+    /* Contenedor que limita el ancho al 80% */
+    .carousel-wrap {
+      width: 80%;
+      margin: 52px auto 0;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Máscara de desvanecimiento en los bordes */
+    .carousel-wrap::before,
+    .carousel-wrap::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .carousel-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, var(--gdm-cream), transparent);
+    }
+    .carousel-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, var(--gdm-cream), transparent);
+    }
+
+    /* Ventana de scroll (no scrollable, solo oculta el overflow) */
+    .carousel-viewport {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Pista que se desplaza */
+    .carousel-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: carouselScroll var(--carousel-speed) linear infinite;
+    }
+    /* Pausar al pasar el mouse */
+    .carousel-track:hover { animation-play-state: paused; }
+
+    @keyframes carouselScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); } /* 50% = longitud de la pista original */
+    }
+
+    /* Tarjeta individual del carrusel */
+    .carousel-item {
+      flex: 0 0 280px;
+      height: 200px;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      display: block;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(0,0,0,.10);
+      transition: transform .35s, box-shadow .35s;
+    }
+    .carousel-item:hover {
+      transform: scale(1.04) translateY(-4px);
+      box-shadow: 0 14px 36px rgba(0,0,0,.18);
+    }
+    /* Foto de fondo */
+    .carousel-item .ci-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .5s;
+    }
+    .carousel-item:hover .ci-bg { transform: scale(1.08); }
+    /* Overlay oscuro */
+    .carousel-item::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,26,48,.72) 0%, rgba(0,26,48,.18) 55%, transparent 100%);
+      transition: background .35s;
+    }
+    .carousel-item:hover::after {
+      background: linear-gradient(to top, rgba(0,26,48,.82) 0%, rgba(0,26,48,.3) 55%, transparent 100%);
+    }
+    /* Logo encima de la foto */
+    .carousel-item .ci-logo {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      max-height: 40px;
+      max-width: 140px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1); /* fuerza blanco */
+      transition: max-height .3s, transform .3s;
+    }
+    .carousel-item:hover .ci-logo {
+      max-height: 48px;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    /* En móvil: carrusel ocupa 95% */
+    @media (max-width: 600px) {
+      .carousel-wrap { width: 95%; }
+      .carousel-item { flex: 0 0 200px; height: 150px; }
     }
 
   </style>
@@ -1365,10 +1466,10 @@
     <nav aria-label="Navegación principal">
       <ul class="nav-links" id="nav-desktop">
         <li><a href="#quienes">Quiénes somos</a></li>
-        <li><a href="#unidades">Unidades de negocio</a></li>
-        <li><a href="#liderazgo">Liderazgo</a></li>
+        <li><a href="#unidades">Nuestras empresas</a></li>
+        <li><a href="#liderazgo">Comité ejecutivo</a></li>
         <li><a href="#reconocimientos">Reconocimientos</a></li>
-        <li><a href="#carrera">Carrera</a></li>
+        <li><a href="#carrera">Trabaja con nosotros</a></li>
         <li><a href="#prensa">Prensa</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
@@ -1407,10 +1508,10 @@
 
     <!-- CAMBIA AQUÍ LOS ENLACES DEL MENÚ MÓVIL -->
     <a href="#quienes"        class="mob-link" data-es="Quiénes somos"      data-en="Who we are">Quiénes somos</a>
-    <a href="#unidades"       class="mob-link" data-es="Unidades de negocio" data-en="Business units">Unidades de negocio</a>
-    <a href="#liderazgo"      class="mob-link" data-es="Liderazgo"           data-en="Leadership">Liderazgo</a>
+    <a href="#unidades"       class="mob-link" data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</a>
+    <a href="#liderazgo"      class="mob-link" data-es="Comité ejecutivo"           data-en="Leadership">Comité ejecutivo</a>
     <a href="#reconocimientos" class="mob-link" data-es="Reconocimientos"    data-en="Recognition">Reconocimientos</a>
-    <a href="#carrera"        class="mob-link" data-es="Carrera"             data-en="Careers">Carrera</a>
+    <a href="#carrera"        class="mob-link" data-es="Trabaja con nosotros"             data-en="Work with us">Trabaja con nosotros</a>
     <a href="#prensa"         class="mob-link" data-es="Prensa"              data-en="Press">Prensa</a>
     <a href="#contacto"       class="mob-link" data-es="Contacto"            data-en="Contact">Contacto</a>
 
@@ -1471,7 +1572,7 @@
         </div>
         <div class="stat-item">
           <div class="stat-number" data-count="5">0</div>
-          <div class="stat-label" data-es="Unidades de negocio" data-en="Business units">Unidades de negocio</div>
+          <div class="stat-label" data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</div>
         </div>
         <div class="stat-item">
           <div class="stat-number" data-count="1200" data-prefix="+">0</div>
@@ -1697,7 +1798,7 @@
   </section>
 
   <!-- La línea de tiempo va fuera del container para scroll horizontal completo -->
-  <div class="timeline-scroll" id="timeline-scroll" style="background:var(--gdm-navy)">
+  <div class="timeline-scroll" style="background:var(--gdm-navy)">
     <div class="timeline-track" id="timeline-track">
       <!-- Los hitos se generan automáticamente con JavaScript desde TIMELINE_DATA abajo -->
     </div>
@@ -1773,7 +1874,7 @@
     <div class="container">
       <div class="sec-head reveal" style="text-align:center">
         <span class="section-tag" style="justify-content:center"
-              data-es="Liderazgo" data-en="Leadership">Liderazgo</span>
+              data-es="Comité ejecutivo" data-en="Leadership">Comité ejecutivo</span>
         <!-- CAMBIA AQUÍ EL TÍTULO DE LIDERAZGO -->
         <h2 class="section-title" style="margin:18px auto 0; text-align:center"
             data-es="Un equipo que combina la visión familiar con la gestión profesional."
@@ -1840,18 +1941,16 @@
 
 
   <!-- ================================================================
-       SECCIÓN 7: UNIDADES DE NEGOCIO
-       Layout: una unidad por fila, foto y contenido alternados.
-       - Fila impar  → foto izquierda (.unit-row sin clase extra)
-       - Fila par    → foto derecha   (.unit-row.reverse)
-       FOTO DE FONDO: cambia el src="img/TU_FOTO.jpg" en cada .unit-photo
-       LOGOS:         cambia los src en .unit-logos
-       REDES:         si no hay enlace real usa href="#" y se oculta solo
+       SECCIÓN 7: NUESTRAS EMPRESAS – Carrusel de logos giratorio
+       Para cambiar las fotos: edita los src="img/..." en cada .carousel-item
+       Para cambiar los enlaces: edita los href en cada <a class="carousel-item">
+       La pista está duplicada para lograr el efecto de loop infinito.
+       VELOCIDAD: busca --carousel-speed en el CSS y cambia los segundos.
        ================================================================ -->
-  <section id="unidades" class="section section-light" style="padding-left:0; padding-right:0">
-    <div class="container" style="padding:0 var(--pad-x)">
+  <section id="unidades" class="section section-light">
+    <div class="container">
       <div class="sec-head reveal">
-        <span class="section-tag dark" data-es="Unidades de negocio" data-en="Business units">Unidades de negocio</span>
+        <span class="section-tag dark" data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</span>
         <h2 class="section-title" style="color:var(--gdm-ink)"
             data-es="Cinco sectores. Un mismo estándar de excelencia."
             data-en="Five sectors. One single standard of excellence.">
@@ -1860,215 +1959,103 @@
       </div>
     </div>
 
-    <!-- Lista de unidades (sin container para que las fotos lleguen al borde) -->
-    <div class="units-list">
+    <!-- ── CARRUSEL – ocupa 80% del ancho, centrado ── -->
+    <div class="carousel-wrap reveal">
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carousel-track">
 
-      <!-- ======= UNIDAD 01: HOTELERÍA — foto izquierda ======= -->
-      <div class="unit-row reveal">
-        <!-- CAMBIA AQUÍ LA FOTO DE HOTELERÍA -->
-        <div class="unit-photo">
-          <img class="unit-bg" src="img/foto_hoteleria.jpg" alt="Hotelería GDM" loading="lazy">
-        </div>
-        <div class="unit-body">
-          <div class="unit-num">01</div>
-          <h3 data-es="Hotelería" data-en="Hotels">Hotelería</h3>
-          <p class="unit-desc"
-             data-es="Experiencias de hospitalidad premium en Bolivia, con Los Tajibos — referente nacional del lujo y primer lugar Merco en su sector — y el Marriott Santa Cruz."
-             data-en="Premium hospitality experiences in Bolivia, with Los Tajibos — the national benchmark for luxury — and Marriott Santa Cruz.">
-            Experiencias de hospitalidad premium en Bolivia, con Los Tajibos — referente nacional del lujo y primer lugar Merco en su sector — y el Marriott Santa Cruz.
-          </p>
-          <!-- LOGOS DE MARCAS -->
-          <div class="unit-logos">
-            <img src="img/Logo_LTH_RGB.png" alt="Los Tajibos Hotel" style="height:75px">
-            <img src="img/Marriott_SCZ.png" alt="Marriott Santa Cruz" style="height:75px">
-          </div>
-          <!-- ÍCONOS SVG DE REDES SOCIALES -->
-          <div class="unit-socials">
-            <a href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" title="Sitio web">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/lostajiboshotel" target="_blank" rel="noopener" title="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/lostajiboshotel/" target="_blank" rel="noopener" title="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@lostajiboshotel" target="_blank" rel="noopener" title="TikTok">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-            </a>
-            <a href="https://www.linkedin.com/company/los-tajibos/" target="_blank" rel="noopener" title="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
+          <!-- ══ PISTA ORIGINAL ══
+               Cada item: foto de fondo + logo encima + enlace al hacer clic
+               CAMBIA AQUÍ LOS src DE LAS FOTOS Y LOS href DE LOS ENLACES -->
 
-      <!-- ======= UNIDAD 02: GASTRONOMÍA — foto derecha ======= -->
-      <div class="unit-row reverse reveal">
-        <div class="unit-photo">
-          <!-- CAMBIA AQUÍ LA FOTO DE GASTRONOMÍA -->
-          <img class="unit-bg" src="img/foto_gastronomia.jpg" alt="Gastronomía premium GDM" loading="lazy">
-        </div>
-        <div class="unit-body">
-          <div class="unit-num">02</div>
-          <h3 data-es="Gastronomía premium" data-en="Premium dining">Gastronomía premium</h3>
-          <p class="unit-desc"
-             data-es="Seis conceptos gastronómicos de alto nivel: desde cocina asiática y peruana hasta coctelería de autor y panadería artesanal."
-             data-en="Six high-end gastronomic concepts: from Asian and Peruvian cuisine to signature cocktails and artisan bakery.">
-            Seis conceptos gastronómicos de alto nivel: desde cocina asiática y peruana hasta coctelería de autor y panadería artesanal.
-          </p>
-          <div class="unit-logos">
-            <img src="img/JDA-SIN-FONDO.png"      alt="Jardín de Asia" style="height:75px">
-            <img src="img/LOGO_NAZCA_2.png"     alt="Nazca" style="height:80px">
-            <img src="img/LA_TERRAZA_01.png"     alt="La Terraza" style="height:85px">
-            <img src="img/Cielo_Dorado_LPZ.png" alt="Cielo Bar La Paz" style="height:75px">
-            <img src="img/Cielo_Dorado_SCZ.png" alt="Cielo Bar SCZ" style="height:75px">
-            <img src="img/Logo_La_Suisse.png"   alt="La Suisse" style="height:60px">
-            <img src="img/Caliente1.png"        alt="Caliente" style="height:65px">
-          </div>
-          <div class="unit-socials">
-            <a href="#" title="Sitio web">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/JardinDeAsia" target="_blank" rel="noopener" title="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/jardindeasia" target="_blank" rel="noopener" title="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@nazca.cocinaperuana" target="_blank" rel="noopener" title="TikTok">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-            </a>
-            <a href="#" title="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
+          <!-- Los Tajibos Hotel -->
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Los Tajibos Hotel">
+            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg" alt="Los Tajibos Hotel">
+            <img class="ci-logo" src="img/LTH.png"               alt="Los Tajibos Hotel">
+          </a>
 
-      <!-- ======= UNIDAD 03: BIENES INMUEBLES — foto izquierda ======= -->
-      <div class="unit-row reveal">
-        <div class="unit-photo">
-          <!-- CAMBIA AQUÍ LA FOTO DE BIENES INMUEBLES -->
-          <img class="unit-bg" src="img/foto_inmuebles.jpg" alt="Bienes inmuebles GDM" loading="lazy">
-        </div>
-        <div class="unit-body">
-          <div class="unit-num">03</div>
-          <h3 data-es="Bienes inmuebles" data-en="Real estate">Bienes inmuebles</h3>
-          <p class="unit-desc"
-             data-es="Los edificios más altos y modernos de La Paz y Santa Cruz, y el proyecto residencial premium de Los Tajibos."
-             data-en="The tallest and most modern buildings in La Paz and Santa Cruz, and the premium residential project of Los Tajibos.">
-            Los edificios más altos y modernos de La Paz y Santa Cruz, y el proyecto residencial premium de Los Tajibos.
-          </p>
-          <div class="unit-logos">
-            <img src="img/LOGO-GREEN-TOWER-LPZ-h.png"  alt="Green Tower La Paz" style="height:90px">
-            <img src="img/LOGO_COLORES_GTSCZ.png"    alt="Green Tower Santa Cruz">
-            <img src="img/LTH_RESIDENCES.png"       alt="Los Tajibos Residences" style="height:75px">
-          </div>
-          <div class="unit-socials">
-            <a href="https://www.greentower.com.bo/la-paz" target="_blank" rel="noopener" title="Sitio web">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/GreenTowerBolivia/" target="_blank" rel="noopener" title="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/greentowerbo" target="_blank" rel="noopener" title="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@greentowerscz" target="_blank" rel="noopener" title="TikTok">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-            </a>
-            <a href="#" title="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
+          <!-- Jardín de Asia -->
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/jardin-de-asia" target="_blank" rel="noopener" aria-label="Jardín de Asia">
+            <img class="ci-bg"   src="img/JDA.jpg"        alt="Jardín de Asia">
+            <img class="ci-logo" src="img/JDASINFONDO.png" alt="Jardín de Asia">
+          </a>
 
-      <!-- ======= UNIDAD 04: FRANQUICIAS — foto derecha ======= -->
-      <div class="unit-row reverse reveal">
-        <div class="unit-photo">
-          <!-- CAMBIA AQUÍ LA FOTO DE FRANQUICIAS -->
-          <img class="unit-bg" src="img/foto_franquicias.jpg" alt="Franquicias GDM" loading="lazy">
-        </div>
-        <div class="unit-body">
-          <div class="unit-num">04</div>
-          <h3 data-es="Franquicias" data-en="Franchises">Franquicias</h3>
-          <p class="unit-desc"
-             data-es="Bolivian Foods opera Burger King en Bolivia, con más de 200 millones de bolivianos en facturación y 7 millones de clientes anuales."
-             data-en="Bolivian Foods operates Burger King in Bolivia, with over 200 million bolivianos in revenue and 7 million annual customers.">
-            Bolivian Foods opera Burger King en Bolivia, con más de 200 millones de bolivianos en facturación y 7 millones de clientes anuales.
-          </p>
-          <div class="unit-logos">
-            <img src="img/BK_LOGO_RGB.png" alt="Burger King Bolivia" style="height:90px">
-          </div>
-          <div class="unit-socials">
-            <a href="https://burgerking.com.bo/" target="_blank" rel="noopener" title="Sitio web">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/BurgerKingBolivia" target="_blank" rel="noopener" title="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/burgerking.bolivia/" target="_blank" rel="noopener" title="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@burgerkingbolivia" target="_blank" rel="noopener" title="TikTok">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-            </a>
-            <a href="https://www.linkedin.com/company/burger-king-bolivia/" target="_blank" rel="noopener" title="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
+          <!-- Nazca -->
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/nazca" target="_blank" rel="noopener" aria-label="Nazca">
+            <img class="ci-bg"   src="img/Nazca.jpg"        alt="Nazca">
+            <img class="ci-logo" src="img/LOGO_NAZCA_2.png"  alt="Nazca">
+          </a>
 
-      <!-- ======= UNIDAD 05: INDUSTRIA — foto izquierda ======= -->
-      <div class="unit-row reveal">
-        <div class="unit-photo">
-          <!-- CAMBIA AQUÍ LA FOTO DE INDUSTRIA -->
-          <img class="unit-bg" src="img/foto_industria.jpg" alt="Industria GDM" loading="lazy">
-        </div>
-        <div class="unit-body">
-          <div class="unit-num">05</div>
-          <h3 data-es="Industria" data-en="Industry">Industria</h3>
-          <p class="unit-desc"
-             data-es="Industrias Papa Imilla, planta procesadora de papa en Cochabamba que abastece a Burger King y marca el regreso del Grupo al sector industrial."
-             data-en="Industrias Papa Imilla, a potato processing plant in Cochabamba that supplies Burger King, marking the Group's return to the industrial sector.">
-            Industrias Papa Imilla, planta procesadora de papa en Cochabamba que abastece a Burger King y marca el regreso del Grupo al sector industrial.
-          </p>
-          <div class="unit-logos">
-            <img src="img/imilla_logo_01.png" alt="Industrias Papa Imilla" style="height:60px">
-          </div>
-          <div class="unit-socials">
-            <a href="#" title="Sitio web">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
-            </a>
-            <a href="#" title="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="#" title="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
+          <!-- Cielo Bar SCZ -->
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/cielo-bar-santa-cruz" target="_blank" rel="noopener" aria-label="Cielo Bar Santa Cruz">
+            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"  alt="Cielo Bar SCZ">
+            <img class="ci-logo" src="img/Cielo_Dorado_SCZ.png" alt="Cielo Bar SCZ">
+          </a>
 
-    </div><!-- /units-list -->
+          <!-- Burger King -->
+          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-label="Burger King Bolivia">
+            <img class="ci-bg"   src="img/Burger_King.jpg"          alt="Burger King Bolivia">
+            <img class="ci-logo" src="img/BK_LOGO_PRIMARY____SU_RGB.png" alt="Burger King Bolivia">
+          </a>
+
+          <!-- Green Tower La Paz -->
+          <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-label="Green Tower La Paz">
+            <img class="ci-bg"   src="img/GT_La_Paz.jpg"          alt="Green Tower La Paz">
+            <img class="ci-logo" src="img/LOGOGREENTOWERLPZh.png"  alt="Green Tower La Paz">
+          </a>
+
+          <!-- Green Tower Santa Cruz -->
+          <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-label="Green Tower Santa Cruz">
+            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"    alt="Green Tower Santa Cruz">
+            <img class="ci-logo" src="img/LOGOCOLORES_GTSCZ.png" alt="Green Tower Santa Cruz">
+          </a>
+
+          <!-- ══ CLON PARA LOOP INFINITO – no edites este bloque ══ -->
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Los Tajibos Hotel" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg" alt="">
+            <img class="ci-logo" src="img/LTH.png"               alt="">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/jardin-de-asia" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/JDA.jpg"        alt="">
+            <img class="ci-logo" src="img/JDASINFONDO.png" alt="">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/nazca" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Nazca.jpg"        alt="">
+            <img class="ci-logo" src="img/LOGO_NAZCA_2.png"  alt="">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/cielo-bar-santa-cruz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"    alt="">
+            <img class="ci-logo" src="img/Cielo_Dorado_SCZ.png" alt="">
+          </a>
+          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Burger_King.jpg"              alt="">
+            <img class="ci-logo" src="img/BK_LOGO_PRIMARY____SU_RGB.png" alt="">
+          </a>
+          <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/GT_La_Paz.jpg"          alt="">
+            <img class="ci-logo" src="img/LOGOGREENTOWERLPZh.png"  alt="">
+          </a>
+          <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"    alt="">
+            <img class="ci-logo" src="img/LOGOCOLORES_GTSCZ.png" alt="">
+          </a>
+
+        </div><!-- /carousel-track -->
+      </div><!-- /carousel-viewport -->
+    </div><!-- /carousel-wrap -->
+
   </section>
 
 
   <!-- ================================================================
        SECCIÓN 8: RECONOCIMIENTOS
-       Columna 1: Texto Merco + 2 fotos del evento
-       Columna 2: Texto Bolivian Business
-       Columna 3: 4 logos GPTW en grilla 2×2
-       FOTOS MERCO:  cambia los src en la columna 1
-       LOGOS GPTW:   cambia los src en la columna 3
+       IMÁGENES DE RANKING: reemplaza los src de los <img> en .award-img
        ================================================================ -->
   <section id="reconocimientos" class="section section-navy">
     <div class="container">
       <div class="sec-head reveal">
         <span class="section-tag" data-es="Reconocimientos" data-en="Recognition">Reconocimientos</span>
+        <!-- CAMBIA AQUÍ EL TÍTULO DE RECONOCIMIENTOS -->
         <h2 class="section-title"
             data-es="Una reputación reconocida por la comunidad."
             data-en="A reputation recognized by the community.">
@@ -2076,10 +2063,9 @@
         </h2>
       </div>
 
-      <!-- Grid de 3 columnas fijas. En tablet colapsa a 1 columna (ver responsive abajo) -->
-      <div class="awards-grid" style="grid-template-columns:1.3fr 1fr 1fr; align-items:start; margin-top:52px">
+      <div class="awards-grid">
 
-        <!-- ── COLUMNA 1: TEXTO MERCO + 2 FOTOS DE APOYO ── -->
+        <!-- RECONOCIMIENTO 1: MERCO -->
         <div class="award-card reveal">
           <h4 data-es="Ranking Merco Empresas y Líderes Bolivia 2025-2026"
               data-en="Merco Companies & Leaders Bolivia 2025-2026">
@@ -2103,18 +2089,13 @@
               Burger King Bolivia, primer lugar en el sector restaurantes y cadenas de comida.
             </li>
           </ul>
-          <!-- FOTOS DEL EVENTO MERCO – CAMBIA AQUÍ LAS RUTAS -->
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:18px">
-            <img src="img/LT_Merco_2025_20260525_Foto2053.jpg"
-                 alt="Evento Merco Bolivia 2025" loading="lazy"
-                 style="width:100%; border-radius:3px; object-fit:cover; aspect-ratio:4/3">
-            <img src="img/LT_Merco_2025_20260525_Foto2151.jpg"
-                 alt="Evento Merco Bolivia 2025" loading="lazy"
-                 style="width:100%; border-radius:3px; object-fit:cover; aspect-ratio:4/3">
+          <!-- IMAGEN DEL RANKING MERCO – CAMBIA AQUÍ LA RUTA SI ES NECESARIO -->
+          <div class="award-img">
+            <img src="img/Ranking_GENERAL_BOLIVIA2025.png" alt="Ranking Merco Bolivia 2025" loading="lazy">
           </div>
         </div>
 
-        <!-- ── COLUMNA 2: TEXTO BOLIVIAN BUSINESS ── -->
+        <!-- RECONOCIMIENTO 2: BOLIVIAN BUSINESS -->
         <div class="award-card reveal" style="transition-delay:.08s">
           <h4 data-es="Ranking 40 Best CEOs de Bolivian Business"
               data-en="40 Best CEOs Ranking by Bolivian Business">
@@ -2126,7 +2107,7 @@
           </p>
         </div>
 
-        <!-- ── COLUMNA 3: 4 LOGOS GREAT PLACE TO WORK ── -->
+        <!-- RECONOCIMIENTO 3: GREAT PLACE TO WORK -->
         <div class="award-card reveal" style="transition-delay:.16s">
           <h4>Great Place to Work 2025</h4>
           <ul>
@@ -2147,12 +2128,11 @@
               Mejor Lugar para Trabajar para las Mujeres.
             </li>
           </ul>
-          <!-- 4 LOGOS GPTW EN GRILLA 2×2 – CAMBIA AQUÍ LAS RUTAS -->
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:18px">
-            <img src="img/Ranking_GENERAL_BOLIVIA2025.png"     alt="GPTW Bolivia 2025"       loading="lazy" style="width:100%;border-radius:3px">
-            <img src="img/Ranking_ParaMujeres_2025.png"        alt="GPTW Para Mujeres 2025"  loading="lazy" style="width:100%;border-radius:3px">
-            <img src="img/Ranking_Cultura_Innovadora_2025.png" alt="GPTW Cultura Innovadora" loading="lazy" style="width:100%;border-radius:3px">
-            <img src="img/Ranking_TalentoJoven_2025_LT.png"    alt="GPTW Talento Joven 2025" loading="lazy" style="width:100%;border-radius:3px">
+          <!-- IMÁGENES DE GREAT PLACE TO WORK -->
+          <div class="award-img" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px">
+            <img src="img/Ranking_ParaMujeres_2025.png"        alt="GPTW Para Mujeres 2025" loading="lazy">
+            <img src="img/Ranking_Cultura_Innovadora_2025.png" alt="GPTW Cultura Innovadora 2025" loading="lazy">
+            <img src="img/Ranking_TalentoJoven_2025_LT.png"    alt="GPTW Talento Joven 2025" loading="lazy">
           </div>
         </div>
 
@@ -2235,7 +2215,7 @@
     <div class="container">
       <div class="career-inner">
         <div class="career-copy reveal">
-          <span class="section-tag" data-es="Carrera" data-en="Careers">Carrera</span>
+          <span class="section-tag" data-es="Trabaja con nosotros" data-en="Careers">Trabaja con nosotros</span>
           <!-- CAMBIA AQUÍ EL TÍTULO DE CARRERA -->
           <h2 class="section-title"
               data-es="Un lugar donde la gente elige quedarse."
@@ -2250,7 +2230,6 @@
         </div>
 
         <div class="career-jobs reveal" style="transition-delay:.1s">
-          <h4 data-es="Empleos disponibles" data-en="Open positions">Empleos disponibles</h4>
           <div class="job-item">
             <div>
               <strong data-es="Próximamente" data-en="Coming soon">Próximamente</strong>
@@ -2362,12 +2341,12 @@
         <h5 data-es="Navegación" data-en="Navigation">Navegación</h5>
         <!-- CAMBIA AQUÍ LOS ENLACES DE NAVEGACIÓN DEL FOOTER -->
         <a href="#quienes"        data-es="Quiénes somos"      data-en="Who we are">Quiénes somos</a>
-        <a href="#unidades"       data-es="Unidades de negocio" data-en="Business units">Unidades de negocio</a>
+        <a href="#unidades"       data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</a>
         <a href="#gobernanza"     data-es="Gobernanza"          data-en="Governance">Gobernanza</a>
-        <a href="#liderazgo"      data-es="Liderazgo"           data-en="Leadership">Liderazgo</a>
+        <a href="#liderazgo"      data-es="Comité ejecutivo"           data-en="Leadership">Comité ejecutivo</a>
         <a href="#reconocimientos" data-es="Reconocimientos"    data-en="Recognition">Reconocimientos</a>
         <a href="#historia"       data-es="Historia"            data-en="History">Historia</a>
-        <a href="#carrera"        data-es="Carrera"             data-en="Careers">Carrera</a>
+        <a href="#carrera"        data-es="Trabaja con nosotros"             data-en="Work with us">Trabaja con nosotros</a>
         <a href="#prensa"         data-es="Sala de prensa"      data-en="Press room">Sala de prensa</a>
       </div>
 
@@ -2489,36 +2468,6 @@
       });
     }
     renderTimeline();
-
-    /* ==============================================================
-       AUTO-SCROLL DE LA LÍNEA DE TIEMPO AL PASAR EL MOUSE
-       - Zona muerta: 20% central donde NO se mueve
-       - Velocidad máxima: 4px por frame (ajusta SPEED para cambiar)
-       - En móvil/táctil no hace nada
-       ============================================================== */
-    const tlScroll  = document.getElementById('timeline-scroll');
-    const SPEED     = 4;      /* px por frame – sube para ir más rápido  */
-    const DEAD_ZONE = 0.20;   /* zona muerta central (0.20 = 20% del ancho) */
-    let   tlVel     = 0;
-
-    tlScroll.addEventListener('mousemove', e => {
-      const rect  = tlScroll.getBoundingClientRect();
-      const ratio = (e.clientX - rect.left) / rect.width;
-      const edge  = 0.5 - DEAD_ZONE / 2;   /* 0.40 */
-      if (ratio < edge) {
-        tlVel = -SPEED * (1 - ratio / edge);
-      } else if (ratio > 1 - edge) {
-        tlVel = SPEED * ((ratio - (1 - edge)) / edge);
-      } else {
-        tlVel = 0;
-      }
-    });
-    tlScroll.addEventListener('mouseleave', () => { tlVel = 0; });
-
-    (function tlLoop() {
-      if (tlVel !== 0) tlScroll.scrollLeft += tlVel;
-      requestAnimationFrame(tlLoop);
-    })();
 
     /* ==============================================================
        3. MENÚ MÓVIL
