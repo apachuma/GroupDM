@@ -890,6 +890,20 @@
       transition: transform .35s, border-color .35s;
     }
     .team-card:hover { transform: translateY(-4px); border-color: var(--gdm-gold); }
+    /* Foto dentro de la tarjeta del comité ejecutivo */
+    .team-card .team-photo {
+      flex: 0 0 54px;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--gdm-gold);
+      flex-shrink: 0;
+    }
+    .team-card .team-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
     .team-initials {
       flex: 0 0 50px;
       width: 50px; height: 50px;
@@ -1614,9 +1628,9 @@
 
       <!-- CAMBIA AQUÍ EL TÍTULO PRINCIPAL DEL HERO -->
       <h1 class="hero-title reveal" style="transition-delay:.08s"
-          data-es="Apostamos por Bolivia y contribuimos a desarrollar su <em>tejido empresarial</em>."
-          data-en="We bet on Bolivia and help build its <em>business fabric</em>.">
-        Apostamos por Bolivia y contribuimos a desarrollar su <em>tejido empresarial</em>.
+          data-es="Apostamos por Bolivia y la conectamos con el mundo."
+          data-en="We bet on Bolivia and connect it with the world.">
+        Apostamos por Bolivia y la conectamos con el mundo.
       </h1>
 
       <!-- CAMBIA AQUÍ EL SUBTÍTULO / DESCRIPCIÓN DEL HERO -->
@@ -1685,9 +1699,9 @@
       <div class="mvv-grid">
         <div class="mvv-cell reveal">
           <h3 data-es="Propósito" data-en="Purpose">Propósito</h3>
-          <p data-es="Apostamos por Bolivia y contribuimos a desarrollar su tejido empresarial, demostrando que la excelencia también es boliviana."
-             data-en="We bet on Bolivia and help build its business fabric, proving that excellence is also Bolivian.">
-            Apostamos por Bolivia y contribuimos a desarrollar su tejido empresarial, demostrando que la excelencia también es boliviana.
+          <p data-es="Apostamos por Bolivia y la conectamos con el mundo, demostrando que la excelencia no tiene fronteras."
+             data-en="We bet on Bolivia and connect it with the world, proving that excellence knows no borders.">
+            Apostamos por Bolivia y la conectamos con el mundo, demostrando que la excelencia no tiene fronteras.
           </p>
         </div>
         <div class="mvv-cell reveal" style="transition-delay:.1s">
@@ -1789,18 +1803,8 @@
                Opción B (con foto): reemplaza el div.founder-placeholder
                con <img src="img/fotos/samuel-arana.jpg" alt="Samuel Doria Medina Arana"> -->
           <div class="founder-photo">
-            <div class="founder-placeholder">
-              <svg viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="8" y="0" width="5" height="55" rx="2.5" fill="#DB9E73" opacity=".5"/>
-                <rect x="17" y="8" width="5" height="64" rx="2.5" fill="#DB9E73" opacity=".7"/>
-                <rect x="26" y="15" width="5" height="65" rx="2.5" fill="#DB9E73"/>
-                <rect x="35" y="8" width="5" height="64" rx="2.5" fill="#DB9E73" opacity=".7"/>
-                <rect x="44" y="0" width="5" height="55" rx="2.5" fill="#DB9E73" opacity=".5"/>
-              </svg>
-              <!-- CAMBIA AQUÍ EL NOMBRE Y CARGO DEL FUNDADOR 1 -->
-              <strong>Samuel Doria Medina Arana</strong>
-              <span data-es="El Fundador · 1ª Generación" data-en="The Founder · 1st Generation">El Fundador · 1ª Generación</span>
-            </div>
+            <!-- FOTO: img/Samuel_Doria_Medina_Arana.png -->
+            <img src="img/Samuel_Doria_Medina_Arana.png" alt="Samuel Doria Medina Arana">
           </div>
           <div class="founder-copy">
             <div class="founder-role" data-es="El Fundador" data-en="The Founder">El Fundador</div>
@@ -1822,25 +1826,14 @@
           </div>
         </div>
 
-        <!-- FUNDADOR 2 – El Constructor (imagen a la derecha) -->
+        <!-- FUNDADOR 2 – El Visionario (imagen a la derecha) -->
         <div class="founder-block reverse reveal">
           <div class="founder-photo">
-            <!-- RUTA DE IMAGEN DEL FUNDADOR 2 – reemplaza si tienes foto -->
-            <div class="founder-placeholder">
-              <svg viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="8" y="0" width="5" height="55" rx="2.5" fill="#DB9E73" opacity=".5"/>
-                <rect x="17" y="8" width="5" height="64" rx="2.5" fill="#DB9E73" opacity=".7"/>
-                <rect x="26" y="15" width="5" height="65" rx="2.5" fill="#DB9E73"/>
-                <rect x="35" y="8" width="5" height="64" rx="2.5" fill="#DB9E73" opacity=".7"/>
-                <rect x="44" y="0" width="5" height="55" rx="2.5" fill="#DB9E73" opacity=".5"/>
-              </svg>
-              <!-- CAMBIA AQUÍ EL NOMBRE Y CARGO DEL FUNDADOR 2 -->
-              <strong>Samuel Doria Medina Auza</strong>
-              <span data-es="El Constructor · Presidente Ejecutivo" data-en="The Builder · Executive President">El Constructor · Presidente Ejecutivo</span>
-            </div>
+            <!-- FOTO: img/SDMA.jpg (misma foto que en Comité Ejecutivo) -->
+            <img src="img/SDMA.jpg" alt="Samuel Doria Medina Auza">
           </div>
           <div class="founder-copy">
-            <div class="founder-role" data-es="El Constructor" data-en="The Builder">El Constructor</div>
+            <div class="founder-role" data-es="El Visionario" data-en="The Visionary">El Visionario</div>
             <h3>Samuel Doria Medina Auza</h3>
             <!-- CAMBIA AQUÍ EL TEXTO BIOGRÁFICO DEL FUNDADOR 2 -->
             <p data-es="Samuel Doria Medina Auza ha continuado la labor emprendedora de su padre, también llamado Samuel, llevándola a niveles que este no pudo imaginar."
@@ -1970,20 +1963,27 @@
       <!-- CAMBIA AQUÍ LOS MIEMBROS DEL EQUIPO
            Formato de iniciales: 2 letras del nombre y apellido (ej: "SA" = Samuel Auza) -->
       <div class="team-grid">
+        <!-- FOTO: img/SDMA.jpg -->
         <div class="team-card reveal">
-          <span class="team-initials">SA</span>
+          <div class="team-photo">
+            <img src="img/SDMA.jpg" alt="Samuel Doria Medina Auza">
+          </div>
           <div class="team-info">
             <strong>Samuel Doria Medina Auza</strong>
             <span data-es="Presidente Ejecutivo" data-en="Executive President">Presidente Ejecutivo</span>
           </div>
         </div>
+        <!-- FOTO: img/SamuelDMM.jpg -->
         <div class="team-card reveal" style="transition-delay:.06s">
-          <span class="team-initials">SM</span>
+          <div class="team-photo">
+            <img src="img/SamuelDMM.jpg" alt="Samuel Doria Medina Monje">
+          </div>
           <div class="team-info">
             <strong>Samuel Doria Medina Monje</strong>
             <span data-es="Vicepresidente Ejecutivo" data-en="Executive Vice President">Vicepresidente Ejecutivo</span>
           </div>
         </div>
+        <!-- Sin foto -->
         <div class="team-card reveal" style="transition-delay:.12s">
           <span class="team-initials">AG</span>
           <div class="team-info">
@@ -1991,6 +1991,7 @@
             <span data-es="Director Estratégico Corporativo" data-en="Corporate Strategy Director">Director Estratégico Corporativo</span>
           </div>
         </div>
+        <!-- Sin foto -->
         <div class="team-card reveal" style="transition-delay:.06s">
           <span class="team-initials">GB</span>
           <div class="team-info">
@@ -1998,15 +1999,21 @@
             <span data-es="Director Financiero Corporativo" data-en="Corporate Finance Director">Director Financiero Corporativo</span>
           </div>
         </div>
+        <!-- FOTO: img/AdrianDM.png -->
         <div class="team-card reveal" style="transition-delay:.12s">
-          <span class="team-initials">AD</span>
+          <div class="team-photo">
+            <img src="img/AdrianDM.png" alt="Adrián Doria Medina">
+          </div>
           <div class="team-info">
             <strong>Adrián Doria Medina</strong>
             <span data-es="Director de Inversiones" data-en="Investment Director">Director de Inversiones</span>
           </div>
         </div>
+        <!-- FOTO: img/FabianDM.png -->
         <div class="team-card reveal" style="transition-delay:.18s">
-          <span class="team-initials">FD</span>
+          <div class="team-photo">
+            <img src="img/FabianDM.png" alt="Fabián Doria Medina">
+          </div>
           <div class="team-info">
             <strong>Fabián Doria Medina</strong>
             <span data-es="Director Administrativo y Contable" data-en="Administrative and Accounting Director">Director Administrativo y Contable</span>
@@ -2064,7 +2071,7 @@
             <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="Burger King">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-label="Green Tower La Paz">
-            <img class="ci-bg"   src="img/GT_La_Paz.jpg"  alt="Green Tower La Paz" loading="lazy">
+            <img class="ci-bg"   src="img/GTLPZ.jpg"  alt="Green Tower La Paz" loading="lazy">
             <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png" alt="Green Tower La Paz">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-label="Green Tower SCZ">
@@ -2110,7 +2117,7 @@
             <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/GT_La_Paz.jpg"  alt="" loading="lazy">
+            <img class="ci-bg"   src="img/GTLPZ.jpg"  alt="" loading="lazy">
             <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png" alt="">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
@@ -2126,7 +2133,7 @@
             <img class="ci-logo" src="img/LA_TERRAZA_01.png" alt="">
           </a>
           <a class="carousel-item" href="#" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/foto_industria.jpg"  alt="" loading="lazy">
+            <img class="ci-bg"   src="img/Papa_Imilla.jpg"  alt="" loading="lazy">
             <img class="ci-logo" src="img/imilla_logo_01.png" alt="">
           </a>
           <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
