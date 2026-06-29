@@ -162,6 +162,71 @@
     .nav-links a:hover { opacity: 1; }
     .nav-links a:hover::after { width: 100%; }
 
+    /* ── SUBMENÚ DESPLEGABLE ────────────────────────────────────── */
+    .nav-links .has-sub { position: relative; }
+    .nav-links .has-sub > a .sub-arrow {
+      display: inline-block; margin-left: 4px; font-size: 9px;
+      vertical-align: middle; transition: transform .3s; opacity: .7;
+    }
+    .nav-links .has-sub.open > a .sub-arrow { transform: rotate(180deg); opacity: 1; }
+
+    .sub-menu {
+      position: absolute;
+      top: calc(100% + 2px);
+      left: -18px;
+      min-width: 220px;
+      background: rgba(0, 26, 48, .97);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--gdm-line);
+      border-radius: 4px;
+      padding: 8px 0;
+      list-style: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity .22s, transform .22s, visibility .22s;
+      z-index: 200;
+      pointer-events: none;
+    }
+    /* Puente invisible que cubre el hueco entre enlace y panel */
+    .sub-menu::after {
+      content: ""; position: absolute;
+      top: -14px; left: 0; right: 0; height: 14px; background: transparent;
+    }
+    /* Triángulo decorativo */
+    .sub-menu::before {
+      content: ""; position: absolute;
+      top: -6px; left: 26px; width: 10px; height: 10px;
+      background: rgba(0, 26, 48, .97);
+      border-left: 1px solid var(--gdm-line);
+      border-top: 1px solid var(--gdm-line);
+      transform: rotate(45deg); z-index: 1;
+    }
+    .sub-menu .sub-divider { height:1px; background:var(--gdm-line); margin:6px 14px; }
+    .sub-menu li a {
+      display: block; padding: 9px 20px; font-size: 13px; font-weight: 400;
+      letter-spacing: .3px; opacity: .82; white-space: nowrap;
+      transition: opacity .2s, padding-left .2s, color .2s;
+    }
+    .sub-menu li a:hover { opacity:1; padding-left:26px; color:var(--gdm-gold-light); }
+    .sub-menu li.sub-main a { font-weight:600; opacity:1; color:var(--gdm-gold-light); }
+    .sub-menu li.sub-main a:hover { padding-left:26px; }
+    .sub-menu li a::after { display: none; }
+    /* Visible solo con clase .open — controlada por JS */
+    .nav-links .has-sub.open .sub-menu {
+      opacity:1; visibility:visible; transform:translateY(0); pointer-events:auto;
+    }
+    /* Submenú móvil */
+    .mob-sub {
+      display: none; flex-direction: column; width: 100%;
+      border-top: 1px solid var(--gdm-line); padding: 4px 0 8px 22px;
+    }
+    .mob-sub.open { display: flex; }
+    .mob-sub a { font-size:17px; font-weight:400; color:var(--gdm-white); padding:10px 0; opacity:.75; border:none; }
+    .mob-sub a:hover { opacity:1; }
+    .mob-sub .mob-sub-main { font-weight:600; opacity:1; color:var(--gdm-gold-light); }
+
     /* --- BOTONES del header --- */
     .header-actions {
       display: flex;
@@ -804,8 +869,8 @@
       font-size: 16.5px;
       line-height: 1.78;
       font-weight: 300;
-      margin: 22px auto 0;
-      text-align: center;
+      margin: 22px 0 0;
+      text-align: left;
       opacity: .85;
     }
     .team-grid {
@@ -852,107 +917,123 @@
 
     /* ================================================================
        SECCIÓN 7: UNIDADES DE NEGOCIO
+       Layout: una unidad por fila, foto y contenido alternados
+       Fila impar  → foto izquierda, contenido derecha
+       Fila par    → contenido izquierda, foto derecha  (.unit-row.reverse)
        ================================================================ */
-    /* CAMBIA AQUÍ LAS UNIDADES DE NEGOCIO Y SUS LOGOS ============ */
-    .units-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 52px;
-    }
-    .unit-card {
-      border: 1px solid #D9CDB8;
-      border-radius: var(--radius-sm);
-      padding: 30px 26px;
-      background: linear-gradient(180deg, rgba(0,45,81,.04), transparent);
-      transition: transform .4s, border-color .4s, box-shadow .4s;
+    .units-list {
       display: flex;
       flex-direction: column;
-      min-height: 260px;
+      gap: 0;
+      margin-top: 52px;
     }
-    .unit-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--gdm-gold-dark);
-      box-shadow: 0 18px 40px rgba(0,45,81,.1);
+    /* Fila de una unidad: foto + contenido lado a lado */
+    .unit-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+      border-bottom: 1px solid #D9CDB8;
+    }
+    .unit-row:first-child { border-top: 1px solid #D9CDB8; }
+
+    /* Foto de la unidad */
+    .unit-photo {
+      position: relative;
+      overflow: hidden;
+      background: var(--gdm-navy-mid);
+      min-height: 320px;
+    }
+    .unit-photo img.unit-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .6s ease;
+    }
+    .unit-row:hover .unit-photo img.unit-bg { transform: scale(1.04); }
+    /* Overlay suave sobre la foto */
+    .unit-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,26,48,.18);
+    }
+    /* En fila par (reverse): foto va a la derecha */
+    .unit-row.reverse .unit-photo { order: 2; }
+    .unit-row.reverse .unit-body  { order: 1; }
+
+    /* Contenido de la unidad */
+    .unit-body {
+      padding: 48px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--gdm-cream);
     }
     .unit-num {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
+      letter-spacing: 2px;
       color: var(--gdm-gold-dark);
-      opacity: .8;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
-    .unit-card h3 {
-      font-weight: 600;
-      font-size: 22px;
+    .unit-card h3,
+    .unit-body h3 {
+      font-weight: 700;
+      font-size: clamp(22px, 2.4vw, 30px);
       color: var(--gdm-ink);
       margin-bottom: 14px;
+      line-height: 1.2;
     }
-
-    /* Logos de marcas dentro de la unidad */
+    .unit-desc {
+      font-size: 15.5px;
+      line-height: 1.72;
+      color: var(--gdm-text-mid);
+      font-weight: 300;
+      margin-bottom: 20px;
+      max-width: 48ch;
+    }
+    /* Logos de marcas */
     .unit-logos {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 14px;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
     }
     .unit-logos img {
-      height: 32px;
+      height: 28px;
       width: auto;
       object-fit: contain;
-      filter: none;
     }
-
-    /* Tags de marcas (texto, cuando no hay logos) */
-    .unit-brands {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 14px;
-    }
-    .unit-brands span {
-      font-size: 11.5px;
-      border: 1px solid #D9CDB8;
-      color: var(--gdm-text-mid);
-      padding: 5px 10px;
-      border-radius: var(--radius-pill);
-    }
-
-    /* Íconos de redes sociales */
+    /* Íconos de redes sociales SVG */
     .unit-socials {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 4px;
+      gap: 10px;
+      align-items: center;
     }
     .unit-socials a {
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-      color: var(--gdm-gold-dark);
-      border: 1px solid #E4D8C4;
-      border-radius: var(--radius-pill);
-      padding: 4px 9px;
-      transition: background .25s, color .25s, border-color .25s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #D9CDB8;
+      color: var(--gdm-text-mid);
+      transition: background .25s, color .25s, border-color .25s, transform .2s;
     }
     .unit-socials a:hover {
       background: var(--gdm-navy);
       color: var(--gdm-white);
       border-color: var(--gdm-navy);
+      transform: translateY(-2px);
     }
-    .unit-link {
-      margin-top: auto;
-      padding-top: 18px;
-      display: inline-flex;
-      gap: 7px;
-      font-size: 12.5px;
-      font-weight: 600;
-      letter-spacing: .5px;
-      color: var(--gdm-gold-dark);
-      transition: gap .3s;
-    }
-    .unit-link:hover { gap: 12px; }
+    .unit-socials a svg { width: 16px; height: 16px; }
+    /* Ocultar íconos sin enlace real */
+    .unit-socials a[href="#"] { display: none; }
 
     /* ================================================================
        SECCIÓN 8: RECONOCIMIENTOS
@@ -1276,8 +1357,11 @@
       /* Gobernanza: columna única */
       .gov-grid { grid-template-columns: 1fr; gap: 32px; }
 
-      /* Unidades de negocio: 2 columnas */
-      .units-grid { grid-template-columns: repeat(2, 1fr); }
+      /* Unidades de negocio: colapsar a columna única */
+      .unit-row { grid-template-columns: 1fr; }
+      .unit-row.reverse .unit-photo { order: 0; }
+      .unit-row.reverse .unit-body  { order: 1; }
+      .unit-body { padding: 32px 24px; }
 
       /* Reconocimientos: 2 columnas */
       .awards-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1313,71 +1397,53 @@
       .btn-intranet .btn-text { display: none; }
       .btn-intranet { padding: 9px 11px; }
 
-      /* Unidades: columna única */
-      .units-grid { grid-template-columns: 1fr; }
+      /* Awards: columna única en móvil */
+      .awards-grid { grid-template-columns: 1fr !important; }
 
       /* Footer: columna única */
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-
-      /* Reconocimientos: columna única */
-      .awards-grid { grid-template-columns: 1fr; }
     }
 
-    /* ================================================================
-       SECCIÓN 7: NUESTRAS EMPRESAS – Carrusel de logos
-       VELOCIDAD: cambia --carousel-speed (segundos) para ir más
-       rápido o más lento. Valor actual: 28s para 7 tarjetas.
-       ================================================================ */
-    :root { --carousel-speed: 28s; }
 
-    /* Contenedor que limita el ancho al 80% */
+    /* ================================================================
+       NUESTRAS EMPRESAS – Carrusel de logos giratorio
+       VELOCIDAD: cambia --carousel-speed (segundos).
+       ================================================================ */
+    :root { --carousel-speed: 32s; }
+
     .carousel-wrap {
       width: 80%;
       margin: 52px auto 0;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
-    /* Máscara de desvanecimiento en los bordes */
     .carousel-wrap::before,
     .carousel-wrap::after {
       content: "";
       position: absolute;
       top: 0; bottom: 0;
-      width: 80px;
+      width: 100px;
       z-index: 2;
       pointer-events: none;
     }
-    .carousel-wrap::before {
-      left: 0;
-      background: linear-gradient(to right, var(--gdm-cream), transparent);
-    }
-    .carousel-wrap::after {
-      right: 0;
-      background: linear-gradient(to left, var(--gdm-cream), transparent);
-    }
+    .carousel-wrap::before { left:0;  background: linear-gradient(to right, var(--gdm-cream), transparent); }
+    .carousel-wrap::after  { right:0; background: linear-gradient(to left,  var(--gdm-cream), transparent); }
 
-    /* Ventana de scroll (no scrollable, solo oculta el overflow) */
-    .carousel-viewport {
-      overflow: hidden;
-      width: 100%;
-    }
+    .carousel-viewport { overflow: hidden; width: 100%; }
 
-    /* Pista que se desplaza */
     .carousel-track {
       display: flex;
       gap: 20px;
       width: max-content;
       animation: carouselScroll var(--carousel-speed) linear infinite;
     }
-    /* Pausar al pasar el mouse */
     .carousel-track:hover { animation-play-state: paused; }
 
     @keyframes carouselScroll {
       0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); } /* 50% = longitud de la pista original */
+      100% { transform: translateX(-50%); }
     }
 
-    /* Tarjeta individual del carrusel */
     .carousel-item {
       flex: 0 0 280px;
       height: 200px;
@@ -1386,60 +1452,52 @@
       position: relative;
       display: block;
       cursor: pointer;
-      text-decoration: none;
       box-shadow: 0 4px 18px rgba(0,0,0,.10);
       transition: transform .35s, box-shadow .35s;
     }
-    .carousel-item:hover {
-      transform: scale(1.04) translateY(-4px);
-      box-shadow: 0 14px 36px rgba(0,0,0,.18);
-    }
-    /* Foto de fondo */
+    .carousel-item:hover { transform: scale(1.04) translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,.18); }
+
     .carousel-item .ci-bg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      position: absolute; inset:0;
+      width:100%; height:100%; object-fit:cover;
       transition: transform .5s;
     }
     .carousel-item:hover .ci-bg { transform: scale(1.08); }
-    /* Overlay oscuro */
+
     .carousel-item::after {
-      content: "";
-      position: absolute;
-      inset: 0;
+      content:"";
+      position: absolute; inset:0;
       background: linear-gradient(to top, rgba(0,26,48,.72) 0%, rgba(0,26,48,.18) 55%, transparent 100%);
       transition: background .35s;
     }
-    .carousel-item:hover::after {
-      background: linear-gradient(to top, rgba(0,26,48,.82) 0%, rgba(0,26,48,.3) 55%, transparent 100%);
-    }
-    /* Logo encima de la foto */
+    .carousel-item:hover::after { background: linear-gradient(to top, rgba(0,26,48,.82) 0%, rgba(0,26,48,.3) 55%, transparent 100%); }
+
     .carousel-item .ci-logo {
       position: absolute;
-      bottom: 16px;
-      left: 50%;
+      bottom: 16px; left: 50%;
       transform: translateX(-50%);
       z-index: 1;
-      max-height: 40px;
-      max-width: 140px;
-      width: auto;
-      object-fit: contain;
-      filter: brightness(0) invert(1); /* fuerza blanco */
+      max-height: 40px; max-width: 140px;
+      width: auto; object-fit: contain;
+      filter: brightness(0) invert(1);
       transition: max-height .3s, transform .3s;
     }
-    .carousel-item:hover .ci-logo {
-      max-height: 48px;
-      transform: translateX(-50%) translateY(-4px);
-    }
+    .carousel-item:hover .ci-logo { max-height: 48px; transform: translateX(-50%) translateY(-4px); }
 
-    /* En móvil: carrusel ocupa 95% */
     @media (max-width: 600px) {
       .carousel-wrap { width: 95%; }
       .carousel-item { flex: 0 0 200px; height: 150px; }
     }
 
+    /* ================================================================
+       GPTW – logos en Trabaja con nosotros
+       ================================================================ */
+    .gptw-logos { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--gdm-line); }
+    .gptw-label { font-size: 12.5px; opacity: .7; margin-bottom: 12px; font-weight: 400; }
+    .gptw-grid  { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; align-items: center; }
+    .gptw-grid img { width:100%; height:auto; border-radius:3px; opacity:.88; transition: opacity .25s, transform .25s; }
+    .gptw-grid img:hover { opacity:1; transform: scale(1.04); }
+    @media (max-width:600px) { .gptw-grid { grid-template-columns: repeat(2,1fr); } }
   </style>
 </head>
 <body>
@@ -1465,10 +1523,20 @@
     <!-- NAVEGACIÓN DESKTOP – CAMBIA AQUÍ LOS TEXTOS Y DESTINOS DEL MENÚ -->
     <nav aria-label="Navegación principal">
       <ul class="nav-links" id="nav-desktop">
-        <li><a href="#quienes">Quiénes somos</a></li>
-        <li><a href="#unidades">Nuestras empresas</a></li>
+        <!-- SUBMENÚ "QUIÉNES SOMOS" -->
+        <li class="has-sub">
+          <a href="#quienes">Quiénes somos <span class="sub-arrow">▾</span></a>
+          <ul class="sub-menu" role="menu">
+            <li class="sub-main"><a href="#quienes" role="menuitem">Quiénes somos</a></li>
+            <div class="sub-divider"></div>
+            <li><a href="#quienes"    role="menuitem">Grupo Empresarial Doria Medina</a></li>
+            <li><a href="#valores"    role="menuitem">Valores</a></li>
+            <li><a href="#historia"   role="menuitem">Historia</a></li>
+            <li><a href="#gobernanza" role="menuitem">Gobernanza</a></li>
+          </ul>
+        </li>
         <li><a href="#liderazgo">Comité ejecutivo</a></li>
-        <li><a href="#reconocimientos">Reconocimientos</a></li>
+        <li><a href="#unidades">Nuestras empresas</a></li>
         <li><a href="#carrera">Trabaja con nosotros</a></li>
         <li><a href="#prensa">Prensa</a></li>
         <li><a href="#contacto">Contacto</a></li>
@@ -1507,13 +1575,22 @@
     <button class="btn-close" id="btn-close-menu" aria-label="Cerrar menú">✕</button>
 
     <!-- CAMBIA AQUÍ LOS ENLACES DEL MENÚ MÓVIL -->
-    <a href="#quienes"        class="mob-link" data-es="Quiénes somos"      data-en="Who we are">Quiénes somos</a>
-    <a href="#unidades"       class="mob-link" data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</a>
-    <a href="#liderazgo"      class="mob-link" data-es="Comité ejecutivo"           data-en="Leadership">Comité ejecutivo</a>
-    <a href="#reconocimientos" class="mob-link" data-es="Reconocimientos"    data-en="Recognition">Reconocimientos</a>
-    <a href="#carrera"        class="mob-link" data-es="Trabaja con nosotros"             data-en="Work with us">Trabaja con nosotros</a>
-    <a href="#prensa"         class="mob-link" data-es="Prensa"              data-en="Press">Prensa</a>
-    <a href="#contacto"       class="mob-link" data-es="Contacto"            data-en="Contact">Contacto</a>
+    <a href="#" class="mob-link mob-has-sub" id="mob-quienes-toggle"
+       data-es="Quiénes somos" data-en="Who we are">
+      Quiénes somos <span class="sub-arrow" style="float:right">▾</span>
+    </a>
+    <div class="mob-sub" id="mob-quienes-sub">
+      <a href="#quienes"    class="mob-sub-main" data-es="Quiénes somos"                   data-en="Who we are">Quiénes somos</a>
+      <a href="#quienes"    data-es="Grupo Empresarial Doria Medina"                        data-en="Doria Medina Group">Grupo Empresarial Doria Medina</a>
+      <a href="#valores"    data-es="Valores"    data-en="Values">Valores</a>
+      <a href="#historia"   data-es="Historia"   data-en="History">Historia</a>
+      <a href="#gobernanza" data-es="Gobernanza" data-en="Governance">Gobernanza</a>
+    </div>
+    <a href="#liderazgo" class="mob-link" data-es="Comité ejecutivo"     data-en="Executive committee">Comité ejecutivo</a>
+    <a href="#unidades"  class="mob-link" data-es="Nuestras empresas"    data-en="Our companies">Nuestras empresas</a>
+    <a href="#carrera"   class="mob-link" data-es="Trabaja con nosotros" data-en="Work with us">Trabaja con nosotros</a>
+    <a href="#prensa"    class="mob-link" data-es="Prensa"               data-en="Press">Prensa</a>
+    <a href="#contacto"  class="mob-link" data-es="Contacto"             data-en="Contact">Contacto</a>
 
     <div class="mob-actions">
       <a href="#" class="btn-intranet" data-es="Intranet · Acceso colaboradores" data-en="Intranet · Employee login">Intranet</a>
@@ -1572,7 +1649,7 @@
         </div>
         <div class="stat-item">
           <div class="stat-number" data-count="5">0</div>
-          <div class="stat-label" data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</div>
+          <div class="stat-label" data-es="Unidades de negocio" data-en="Business units">Unidades de negocio</div>
         </div>
         <div class="stat-item">
           <div class="stat-number" data-count="1200" data-prefix="+">0</div>
@@ -1798,7 +1875,7 @@
   </section>
 
   <!-- La línea de tiempo va fuera del container para scroll horizontal completo -->
-  <div class="timeline-scroll" style="background:var(--gdm-navy)">
+  <div class="timeline-scroll" id="timeline-scroll" style="background:var(--gdm-navy)">
     <div class="timeline-track" id="timeline-track">
       <!-- Los hitos se generan automáticamente con JavaScript desde TIMELINE_DATA abajo -->
     </div>
@@ -1872,11 +1949,11 @@
        ================================================================ -->
   <section id="liderazgo" class="section section-navy">
     <div class="container">
-      <div class="sec-head reveal" style="text-align:center">
-        <span class="section-tag" style="justify-content:center"
-              data-es="Comité ejecutivo" data-en="Leadership">Comité ejecutivo</span>
+      <div class="sec-head reveal">
+        <span class="section-tag"
+              data-es="Comité ejecutivo" data-en="Executive committee">Comité ejecutivo</span>
         <!-- CAMBIA AQUÍ EL TÍTULO DE LIDERAZGO -->
-        <h2 class="section-title" style="margin:18px auto 0; text-align:center"
+        <h2 class="section-title"
             data-es="Un equipo que combina la visión familiar con la gestión profesional."
             data-en="A team that combines family vision with professional management.">
           Un equipo que combina la visión familiar con la gestión profesional.
@@ -1941,10 +2018,11 @@
 
 
   <!-- ================================================================
-       SECCIÓN 7: NUESTRAS EMPRESAS – Carrusel de logos giratorio
-       Para cambiar las fotos: edita los src="img/..." en cada .carousel-item
-       Para cambiar los enlaces: edita los href en cada <a class="carousel-item">
-       La pista está duplicada para lograr el efecto de loop infinito.
+  <!-- ================================================================
+       SECCIÓN 7: NUESTRAS EMPRESAS
+       Carrusel giratorio de logos sobre fondo crema.
+       Para agregar una empresa: copia un bloque <a class="carousel-item">
+       dentro de "PISTA ORIGINAL" y repite el mismo bloque en "CLON".
        VELOCIDAD: busca --carousel-speed en el CSS y cambia los segundos.
        ================================================================ -->
   <section id="unidades" class="section section-light">
@@ -1959,85 +2037,101 @@
       </div>
     </div>
 
-    <!-- ── CARRUSEL – ocupa 80% del ancho, centrado ── -->
+    <!-- Carrusel: 80% del ancho, centrado -->
     <div class="carousel-wrap reveal">
       <div class="carousel-viewport">
-        <div class="carousel-track" id="carousel-track">
+        <div class="carousel-track">
 
-          <!-- ══ PISTA ORIGINAL ══
-               Cada item: foto de fondo + logo encima + enlace al hacer clic
-               CAMBIA AQUÍ LOS src DE LAS FOTOS Y LOS href DE LOS ENLACES -->
-
-          <!-- Los Tajibos Hotel -->
+          <!-- ══ PISTA ORIGINAL – edita aquí los items ══ -->
           <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Los Tajibos Hotel">
-            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg" alt="Los Tajibos Hotel">
-            <img class="ci-logo" src="img/LTH.png"               alt="Los Tajibos Hotel">
+            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg"  alt="Los Tajibos Hotel" loading="lazy">
+            <img class="ci-logo" src="img/LTH.png" alt="Los Tajibos Hotel">
           </a>
-
-          <!-- Jardín de Asia -->
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/jardin-de-asia" target="_blank" rel="noopener" aria-label="Jardín de Asia">
-            <img class="ci-bg"   src="img/JDA.jpg"        alt="Jardín de Asia">
-            <img class="ci-logo" src="img/JDASINFONDO.png" alt="Jardín de Asia">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Jardín de Asia">
+            <img class="ci-bg"   src="img/JDA.jpg"  alt="Jardín de Asia" loading="lazy">
+            <img class="ci-logo" src="img/JDA-SIN-FONDO.png" alt="Jardín de Asia">
           </a>
-
-          <!-- Nazca -->
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/nazca" target="_blank" rel="noopener" aria-label="Nazca">
-            <img class="ci-bg"   src="img/Nazca.jpg"        alt="Nazca">
-            <img class="ci-logo" src="img/LOGO_NAZCA_2.png"  alt="Nazca">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Nazca">
+            <img class="ci-bg"   src="img/Nazca.jpg"  alt="Nazca" loading="lazy">
+            <img class="ci-logo" src="img/LOGO_NAZCA_2.png" alt="Nazca">
           </a>
-
-          <!-- Cielo Bar SCZ -->
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/cielo-bar-santa-cruz" target="_blank" rel="noopener" aria-label="Cielo Bar Santa Cruz">
-            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"  alt="Cielo Bar SCZ">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Cielo Bar SCZ">
+            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"  alt="Cielo Bar SCZ" loading="lazy">
             <img class="ci-logo" src="img/Cielo_Dorado_SCZ.png" alt="Cielo Bar SCZ">
           </a>
-
-          <!-- Burger King -->
-          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-label="Burger King Bolivia">
-            <img class="ci-bg"   src="img/Burger_King.jpg"          alt="Burger King Bolivia">
-            <img class="ci-logo" src="img/BK_LOGO_PRIMARY____SU_RGB.png" alt="Burger King Bolivia">
+          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-label="Burger King">
+            <img class="ci-bg"   src="img/Burger_King.jpg"  alt="Burger King" loading="lazy">
+            <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="Burger King">
           </a>
-
-          <!-- Green Tower La Paz -->
           <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-label="Green Tower La Paz">
-            <img class="ci-bg"   src="img/GT_La_Paz.jpg"          alt="Green Tower La Paz">
-            <img class="ci-logo" src="img/LOGOGREENTOWERLPZh.png"  alt="Green Tower La Paz">
+            <img class="ci-bg"   src="img/GT_La_Paz.jpg"  alt="Green Tower La Paz" loading="lazy">
+            <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png" alt="Green Tower La Paz">
+          </a>
+          <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-label="Green Tower SCZ">
+            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"  alt="Green Tower SCZ" loading="lazy">
+            <img class="ci-logo" src="img/LOGO_COLORES_GTSCZ.png" alt="Green Tower SCZ">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Caliente">
+            <img class="ci-bg"   src="img/Caliente1.png"  alt="Caliente" loading="lazy">
+            <img class="ci-logo" src="img/Caliente_blanco.png" alt="Caliente">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="La Terraza">
+            <img class="ci-bg"   src="img/LA_TERRAZA_01.png"  alt="La Terraza" loading="lazy">
+            <img class="ci-logo" src="img/LA_TERRAZA_01.png" alt="La Terraza">
+          </a>
+          <a class="carousel-item" href="#" target="_blank" rel="noopener" aria-label="Papa Imilla">
+            <img class="ci-bg"   src="img/imilla_logo_01.png"  alt="Papa Imilla" loading="lazy">
+            <img class="ci-logo" src="img/imilla.png" alt="Papa Imilla">
+          </a>
+          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-label="Burger King Bolivia">
+            <img class="ci-bg"   src="img/Burger_King.jpg"  alt="Burger King Bolivia" loading="lazy">
+            <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="Burger King Bolivia">
           </a>
 
-          <!-- Green Tower Santa Cruz -->
-          <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-label="Green Tower Santa Cruz">
-            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"    alt="Green Tower Santa Cruz">
-            <img class="ci-logo" src="img/LOGOCOLORES_GTSCZ.png" alt="Green Tower Santa Cruz">
+          <!-- ══ CLON PARA LOOP INFINITO – no editar ══ -->
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/LTH.png" alt="">
           </a>
-
-          <!-- ══ CLON PARA LOOP INFINITO – no edites este bloque ══ -->
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Los Tajibos Hotel" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg" alt="">
-            <img class="ci-logo" src="img/LTH.png"               alt="">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/JDA.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/JDA-SIN-FONDO.png" alt="">
           </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/jardin-de-asia" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/JDA.jpg"        alt="">
-            <img class="ci-logo" src="img/JDASINFONDO.png" alt="">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Nazca.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/LOGO_NAZCA_2.png" alt="">
           </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/nazca" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Nazca.jpg"        alt="">
-            <img class="ci-logo" src="img/LOGO_NAZCA_2.png"  alt="">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es/restaurantes/cielo-bar-santa-cruz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"    alt="">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"  alt="" loading="lazy">
             <img class="ci-logo" src="img/Cielo_Dorado_SCZ.png" alt="">
           </a>
           <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Burger_King.jpg"              alt="">
-            <img class="ci-logo" src="img/BK_LOGO_PRIMARY____SU_RGB.png" alt="">
+            <img class="ci-bg"   src="img/Burger_King.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/GT_La_Paz.jpg"          alt="">
-            <img class="ci-logo" src="img/LOGOGREENTOWERLPZh.png"  alt="">
+            <img class="ci-bg"   src="img/GT_La_Paz.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png" alt="">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"    alt="">
-            <img class="ci-logo" src="img/LOGOCOLORES_GTSCZ.png" alt="">
+            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/LOGO_COLORES_GTSCZ.png" alt="">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/foto_gastronomia.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/Caliente1.png" alt="">
+          </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/foto_gastronomia.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/LA_TERRAZA_01.png" alt="">
+          </a>
+          <a class="carousel-item" href="#" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/foto_industria.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/imilla_logo_01.png" alt="">
+          </a>
+          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/Burger_King.jpg"  alt="" loading="lazy">
+            <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="">
           </a>
 
         </div><!-- /carousel-track -->
@@ -2045,167 +2139,6 @@
     </div><!-- /carousel-wrap -->
 
   </section>
-
-
-  <!-- ================================================================
-       SECCIÓN 8: RECONOCIMIENTOS
-       IMÁGENES DE RANKING: reemplaza los src de los <img> en .award-img
-       ================================================================ -->
-  <section id="reconocimientos" class="section section-navy">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="section-tag" data-es="Reconocimientos" data-en="Recognition">Reconocimientos</span>
-        <!-- CAMBIA AQUÍ EL TÍTULO DE RECONOCIMIENTOS -->
-        <h2 class="section-title"
-            data-es="Una reputación reconocida por la comunidad."
-            data-en="A reputation recognized by the community.">
-          Una reputación reconocida por la comunidad.
-        </h2>
-      </div>
-
-      <div class="awards-grid">
-
-        <!-- RECONOCIMIENTO 1: MERCO -->
-        <div class="award-card reveal">
-          <h4 data-es="Ranking Merco Empresas y Líderes Bolivia 2025-2026"
-              data-en="Merco Companies & Leaders Bolivia 2025-2026">
-            Ranking Merco Empresas y Líderes Bolivia 2025-2026
-          </h4>
-          <ul>
-            <li data-es="Samuel Doria Medina Monje, tercer empresario con mejor reputación de Bolivia."
-                data-en="Samuel Doria Medina Monje, third most reputable businessman in Bolivia.">
-              Samuel Doria Medina Monje, tercer empresario con mejor reputación de Bolivia.
-            </li>
-            <li data-es="Comversa, quinto lugar entre los holdings con mejor reputación del país."
-                data-en="Comversa, fifth among the holdings with the best reputation in the country.">
-              Comversa, quinto lugar entre los holdings con mejor reputación del país.
-            </li>
-            <li data-es="Los Tajibos, primer lugar en hotelería y turismo y puesto 20 entre las cien empresas con mejor reputación de Bolivia."
-                data-en="Los Tajibos, first in hospitality and tourism and 20th among the hundred most reputable companies in Bolivia.">
-              Los Tajibos, primer lugar en hotelería y turismo y puesto 20 entre las cien empresas con mejor reputación de Bolivia.
-            </li>
-            <li data-es="Burger King Bolivia, primer lugar en el sector restaurantes y cadenas de comida."
-                data-en="Burger King Bolivia, first in the restaurants and food chains sector.">
-              Burger King Bolivia, primer lugar en el sector restaurantes y cadenas de comida.
-            </li>
-          </ul>
-          <!-- IMAGEN DEL RANKING MERCO – CAMBIA AQUÍ LA RUTA SI ES NECESARIO -->
-          <div class="award-img">
-            <img src="img/Ranking_GENERAL_BOLIVIA2025.png" alt="Ranking Merco Bolivia 2025" loading="lazy">
-          </div>
-        </div>
-
-        <!-- RECONOCIMIENTO 2: BOLIVIAN BUSINESS -->
-        <div class="award-card reveal" style="transition-delay:.08s">
-          <h4 data-es="Ranking 40 Best CEOs de Bolivian Business"
-              data-en="40 Best CEOs Ranking by Bolivian Business">
-            Ranking 40 Best CEOs de Bolivian Business
-          </h4>
-          <p data-es="Samuel Doria Medina Auza ocupó el primer lugar en la categoría de mejor empresario y líder corporativo, según la revista Bolivian Business durante varios años consecutivos."
-             data-en="Samuel Doria Medina Auza ranked first in the best businessman and corporate leader category, according to Bolivian Business magazine, for several consecutive years.">
-            Samuel Doria Medina Auza ocupó el primer lugar en la categoría de mejor empresario y líder corporativo, según la revista Bolivian Business durante varios años consecutivos.
-          </p>
-        </div>
-
-        <!-- RECONOCIMIENTO 3: GREAT PLACE TO WORK -->
-        <div class="award-card reveal" style="transition-delay:.16s">
-          <h4>Great Place to Work 2025</h4>
-          <ul>
-            <li data-es="Una de las 10 Mejores Empresas para Trabajar en Bolivia."
-                data-en="One of the 10 Best Companies to Work for in Bolivia.">
-              Una de las 10 Mejores Empresas para Trabajar en Bolivia.
-            </li>
-            <li data-es="Distinción a la Cultura Innovadora."
-                data-en="Innovative Culture distinction.">
-              Distinción a la Cultura Innovadora.
-            </li>
-            <li data-es="Distinción a la Gestión de Talento Joven."
-                data-en="Young Talent Management distinction.">
-              Distinción a la Gestión de Talento Joven.
-            </li>
-            <li data-es="Mejor Lugar para Trabajar para las Mujeres."
-                data-en="Best Workplace for Women.">
-              Mejor Lugar para Trabajar para las Mujeres.
-            </li>
-          </ul>
-          <!-- IMÁGENES DE GREAT PLACE TO WORK -->
-          <div class="award-img" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px">
-            <img src="img/Ranking_ParaMujeres_2025.png"        alt="GPTW Para Mujeres 2025" loading="lazy">
-            <img src="img/Ranking_Cultura_Innovadora_2025.png" alt="GPTW Cultura Innovadora 2025" loading="lazy">
-            <img src="img/Ranking_TalentoJoven_2025_LT.png"    alt="GPTW Talento Joven 2025" loading="lazy">
-          </div>
-        </div>
-
-      </div><!-- /awards-grid -->
-    </div>
-  </section>
-
-
-  <!-- ================================================================
-       SECCIÓN 9: COMPROMISO CON BOLIVIA
-       ================================================================ -->
-  <section id="compromiso" class="section section-light">
-    <div class="container">
-      <div class="sec-head reveal">
-        <span class="section-tag dark" data-es="Compromiso con Bolivia" data-en="Commitment to Bolivia">Compromiso con Bolivia</span>
-        <!-- CAMBIA AQUÍ EL TÍTULO DE COMPROMISO -->
-        <h2 class="section-title" style="color:var(--gdm-ink)"
-            data-es="Creemos en Bolivia y lo demostramos con hechos."
-            data-en="We believe in Bolivia and we prove it with action.">
-          Creemos en Bolivia y lo demostramos con hechos.
-        </h2>
-      </div>
-
-      <!-- CAMBIA AQUÍ LOS EJES DE COMPROMISO -->
-      <div class="ejes-grid">
-        <div class="eje-card reveal">
-          <div class="eje-num">01</div>
-          <h3 data-es="Desarrollo del país" data-en="National development">Desarrollo del país</h3>
-          <p data-es="Empleo formal, cadena de proveedores locales y aporte al crecimiento de cada sector."
-             data-en="Formal employment, a local supplier chain and a contribution to the growth of each sector.">
-            Empleo formal, cadena de proveedores locales y aporte al crecimiento de cada sector.
-          </p>
-        </div>
-        <div class="eje-card reveal" style="transition-delay:.08s">
-          <div class="eje-num">02</div>
-          <h3 data-es="Proyectos que transforman" data-en="Projects that transform">Proyectos que transforman</h3>
-          <p data-es="Desarrollos que elevan el estándar urbano y de servicios en Bolivia."
-             data-en="Developments that raise the urban and service standard in Bolivia.">
-            Desarrollos que elevan el estándar urbano y de servicios en Bolivia.
-          </p>
-        </div>
-        <div class="eje-card reveal" style="transition-delay:.16s">
-          <div class="eje-num">03</div>
-          <h3 data-es="Ética y transparencia" data-en="Ethics and transparency">Ética y transparencia</h3>
-          <p data-es="Una forma de hacer negocios basada en el cumplimiento y la confianza: cumplir, pagar a tiempo, formalizar y cuidar a la gente."
-             data-en="A way of doing business grounded in compliance and trust: deliver, pay on time, formalize and care for people.">
-            Una forma de hacer negocios basada en el cumplimiento y la confianza: cumplir, pagar a tiempo, formalizar y cuidar a la gente.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ================================================================
-       SECCIÓN 10: FRASE DESTACADA
-       CAMBIA AQUÍ LA FRASE Y EL AUTOR
-       ================================================================ -->
-  <section class="section quote-section">
-    <div class="container">
-      <blockquote class="reveal"
-                  data-es='"El éxito no se mide solo en resultados financieros. Se mide en <em>reputación, transparencia, cumplimiento, buena gobernanza</em> y una cultura interna que genera pertenencia."'
-                  data-en='"Success is not measured in financial results alone. It is measured in <em>reputation, transparency, compliance, good governance</em> and an internal culture that creates belonging."'>
-        "El éxito no se mide solo en resultados financieros. Se mide en <em>reputación, transparencia, cumplimiento, buena gobernanza</em> y una cultura interna que genera pertenencia."
-      </blockquote>
-      <!-- CAMBIA AQUÍ EL NOMBRE DEL AUTOR DE LA FRASE -->
-      <div class="quote-author reveal" style="transition-delay:.1s"
-           data-es="Familia Doria Medina" data-en="Doria Medina Family">
-        Familia Doria Medina
-      </div>
-    </div>
-  </section>
-
 
   <!-- ================================================================
        SECCIÓN 11: CARRERA
@@ -2215,7 +2148,7 @@
     <div class="container">
       <div class="career-inner">
         <div class="career-copy reveal">
-          <span class="section-tag" data-es="Trabaja con nosotros" data-en="Careers">Trabaja con nosotros</span>
+          <span class="section-tag" data-es="Trabaja con nosotros" data-en="Work with us">Trabaja con nosotros</span>
           <!-- CAMBIA AQUÍ EL TÍTULO DE CARRERA -->
           <h2 class="section-title"
               data-es="Un lugar donde la gente elige quedarse."
@@ -2249,6 +2182,19 @@
                data-es="Enviar mi CV" data-en="Send my CV">
               Enviar mi CV
             </a>
+          </div>
+          <!-- LOGOS GREAT PLACE TO WORK -->
+          <div class="gptw-logos">
+            <p class="gptw-label" data-es="Reconocida como uno de los mejores lugares para trabajar en Bolivia:"
+               data-en="Recognized as one of the best places to work in Bolivia:">
+              Reconocida como uno de los mejores lugares para trabajar en Bolivia:
+            </p>
+            <div class="gptw-grid">
+              <img src="img/Ranking_GENERAL_BOLIVIA2025.png"     alt="GPTW Bolivia 2025"      loading="lazy">
+              <img src="img/Ranking_ParaMujeres_2025.png"        alt="GPTW Para Mujeres"       loading="lazy">
+              <img src="img/Ranking_Cultura_Innovadora_2025.png" alt="GPTW Cultura Innovadora" loading="lazy">
+              <img src="img/Ranking_TalentoJoven_2025_LT.png"    alt="GPTW Talento Joven"      loading="lazy">
+            </div>
           </div>
         </div>
       </div>
@@ -2312,6 +2258,48 @@
             El hotel insignia del Grupo reafirma su liderazgo en hotelería premium en Bolivia.
           </p>
         </article>
+
+        <!-- NOTICIA 4 – Merco -->
+        <article class="news-card reveal" style="transition-delay:.1s">
+          <div class="news-meta" data-es="Reputación · Bolivia" data-en="Reputation · Bolivia">Reputación · Bolivia</div>
+          <h4 data-es="Ranking Merco Empresas y Líderes Bolivia 2025-2026" data-en="Merco Companies &amp; Leaders Bolivia 2025-2026">
+            Ranking Merco Empresas y Líderes Bolivia 2025-2026
+          </h4>
+          <p data-es="Los Tajibos obtuvo el primer lugar en hotelería y turismo. Samuel Doria Medina Monje, tercer empresario con mejor reputación del país."
+             data-en="Los Tajibos ranked first in hospitality and tourism. Samuel Doria Medina Monje, third most reputable businessman in Bolivia.">
+            Los Tajibos obtuvo el primer lugar en hotelería y turismo. Samuel Doria Medina Monje, tercer empresario con mejor reputación del país.
+          </p>
+        </article>
+
+        <!-- NOTICIA 5 – Bolivian Business -->
+        <article class="news-card reveal" style="transition-delay:.2s">
+          <div class="news-meta" data-es="Liderazgo · Empresarial" data-en="Leadership · Business">Liderazgo · Empresarial</div>
+          <h4 data-es="Samuel Doria Medina Auza, primer lugar en Ranking 40 Best CEOs de Bolivian Business"
+              data-en="Samuel Doria Medina Auza, first place in Bolivian Business 40 Best CEOs Ranking">
+            Samuel Doria Medina Auza, primer lugar en Ranking 40 Best CEOs de Bolivian Business
+          </h4>
+          <p data-es="Reconocido como el mejor empresario y líder corporativo del país durante varios años consecutivos."
+             data-en="Recognized as Bolivia's best businessman and corporate leader for several consecutive years.">
+            Reconocido como el mejor empresario y líder corporativo del país durante varios años consecutivos.
+          </p>
+        </article>
+
+        <!-- NOTICIA 6 – Merco evento -->
+        <article class="news-card reveal" style="transition-delay:.3s">
+          <div class="news-meta" data-es="Evento · Merco 2025" data-en="Event · Merco 2025">Evento · Merco 2025</div>
+          <h4 data-es="Los Tajibos recibió el reconocimiento Merco en ceremonia en Santa Cruz"
+              data-en="Los Tajibos received the Merco recognition at a ceremony in Santa Cruz">
+            Los Tajibos recibió el reconocimiento Merco en ceremonia en Santa Cruz
+          </h4>
+          <p data-es="El hotel fue galardonado consolidándose como referente nacional en hotelería premium."
+             data-en="The hotel was honored, consolidating its position as a national benchmark in premium hospitality.">
+            El hotel fue galardonado consolidándose como referente nacional en hotelería premium.
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px">
+            <img src="img/LT_Merco_2025_20260525_Foto2053.jpg" alt="Merco 2025" loading="lazy" style="width:100%;border-radius:3px;aspect-ratio:4/3;object-fit:cover">
+            <img src="img/LT_Merco_2025_20260525_Foto2151.jpg" alt="Merco 2025" loading="lazy" style="width:100%;border-radius:3px;aspect-ratio:4/3;object-fit:cover">
+          </div>
+        </article>
       </div><!-- /news-grid -->
     </div>
   </section>
@@ -2340,14 +2328,12 @@
       <div class="footer-col reveal" style="transition-delay:.08s">
         <h5 data-es="Navegación" data-en="Navigation">Navegación</h5>
         <!-- CAMBIA AQUÍ LOS ENLACES DE NAVEGACIÓN DEL FOOTER -->
-        <a href="#quienes"        data-es="Quiénes somos"      data-en="Who we are">Quiénes somos</a>
-        <a href="#unidades"       data-es="Nuestras empresas" data-en="Our companies">Nuestras empresas</a>
-        <a href="#gobernanza"     data-es="Gobernanza"          data-en="Governance">Gobernanza</a>
-        <a href="#liderazgo"      data-es="Comité ejecutivo"           data-en="Leadership">Comité ejecutivo</a>
-        <a href="#reconocimientos" data-es="Reconocimientos"    data-en="Recognition">Reconocimientos</a>
-        <a href="#historia"       data-es="Historia"            data-en="History">Historia</a>
-        <a href="#carrera"        data-es="Trabaja con nosotros"             data-en="Work with us">Trabaja con nosotros</a>
-        <a href="#prensa"         data-es="Sala de prensa"      data-en="Press room">Sala de prensa</a>
+        <a href="#quienes"  data-es="Quiénes somos"        data-en="Who we are">Quiénes somos</a>
+        <a href="#liderazgo" data-es="Comité ejecutivo"     data-en="Executive committee">Comité ejecutivo</a>
+        <a href="#unidades"  data-es="Nuestras empresas"    data-en="Our companies">Nuestras empresas</a>
+        <a href="#carrera"   data-es="Trabaja con nosotros" data-en="Work with us">Trabaja con nosotros</a>
+        <a href="#prensa"    data-es="Prensa"               data-en="Press">Prensa</a>
+        <a href="#contacto"  data-es="Contacto"             data-en="Contact">Contacto</a>
       </div>
 
       <!-- COLUMNA CONTACTO -->
@@ -2470,6 +2456,36 @@
     renderTimeline();
 
     /* ==============================================================
+       AUTO-SCROLL DE LA LÍNEA DE TIEMPO AL PASAR EL MOUSE
+       - Zona muerta: 20% central donde NO se mueve
+       - Velocidad máxima: 4px por frame (ajusta SPEED para cambiar)
+       - En móvil/táctil no hace nada
+       ============================================================== */
+    const tlScroll  = document.getElementById('timeline-scroll');
+    const SPEED     = 4;      /* px por frame – sube para ir más rápido  */
+    const DEAD_ZONE = 0.20;   /* zona muerta central (0.20 = 20% del ancho) */
+    let   tlVel     = 0;
+
+    tlScroll.addEventListener('mousemove', e => {
+      const rect  = tlScroll.getBoundingClientRect();
+      const ratio = (e.clientX - rect.left) / rect.width;
+      const edge  = 0.5 - DEAD_ZONE / 2;   /* 0.40 */
+      if (ratio < edge) {
+        tlVel = -SPEED * (1 - ratio / edge);
+      } else if (ratio > 1 - edge) {
+        tlVel = SPEED * ((ratio - (1 - edge)) / edge);
+      } else {
+        tlVel = 0;
+      }
+    });
+    tlScroll.addEventListener('mouseleave', () => { tlVel = 0; });
+
+    (function tlLoop() {
+      if (tlVel !== 0) tlScroll.scrollLeft += tlVel;
+      requestAnimationFrame(tlLoop);
+    })();
+
+    /* ==============================================================
        3. MENÚ MÓVIL
        ============================================================== */
     const btnMenu      = document.getElementById('btn-menu');
@@ -2502,8 +2518,65 @@
     });
 
     /* ==============================================================
-       4. HEADER SCROLL – añade clase cuando baja la página
+       SUBMENÚ DESKTOP – mouseenter/mouseleave con delay de 120ms
+       Evita que el panel se cierre al cruzar el gap entre el enlace y el panel
        ============================================================== */
+    document.querySelectorAll('.has-sub').forEach(item => {
+      let closeTimer = null;
+
+      function openSub()    { clearTimeout(closeTimer); item.classList.add('open'); }
+      function schedClose() { closeTimer = setTimeout(() => item.classList.remove('open'), 120); }
+
+      item.addEventListener('mouseenter', openSub);
+      item.addEventListener('mouseleave', schedClose);
+
+      const panel = item.querySelector('.sub-menu');
+      if (panel) {
+        panel.addEventListener('mouseenter', openSub);
+        panel.addEventListener('mouseleave', schedClose);
+      }
+
+      /* Touch: toggle al tocar el enlace padre */
+      item.querySelector('a').addEventListener('click', e => {
+        if (window.matchMedia('(hover: none)').matches) {
+          e.preventDefault();
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.has-sub').forEach(i => i.classList.remove('open'));
+          if (!isOpen) item.classList.add('open');
+        }
+      });
+    });
+
+    /* Cerrar al hacer clic fuera */
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.has-sub'))
+        document.querySelectorAll('.has-sub').forEach(i => i.classList.remove('open'));
+    });
+
+    /* Cerrar al seleccionar un ítem del submenú */
+    document.querySelectorAll('.sub-menu a').forEach(link => {
+      link.addEventListener('click', () =>
+        document.querySelectorAll('.has-sub').forEach(i => i.classList.remove('open'))
+      );
+    });
+
+    /* SUBMENÚ MÓVIL – toggle "Quiénes somos" */
+    const mobToggle = document.getElementById('mob-quienes-toggle');
+    const mobSub    = document.getElementById('mob-quienes-sub');
+    if (mobToggle && mobSub) {
+      mobToggle.addEventListener('click', e => {
+        e.preventDefault();
+        const open = mobSub.classList.toggle('open');
+        mobToggle.querySelector('.sub-arrow').textContent = open ? '▴' : '▾';
+      });
+    }
+
+    /* Cerrar submenú móvil al seleccionar un ítem */
+    if (mobSub) {
+      mobSub.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+    }
     const header = document.getElementById('header');
     const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
