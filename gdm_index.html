@@ -1426,28 +1426,20 @@
     :root { --carousel-speed: 32s; }
 
     .carousel-wrap {
-      width: 80%;
-      margin: 52px auto 0;
+      width: 100%;           /* extremo a extremo */
+      margin: 52px 0 0;
       position: relative;
       overflow: hidden;
     }
+    /* Sin degradado de bordes ya que va de extremo a extremo */
     .carousel-wrap::before,
-    .carousel-wrap::after {
-      content: "";
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 100px;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .carousel-wrap::before { left:0;  background: linear-gradient(to right, var(--gdm-cream), transparent); }
-    .carousel-wrap::after  { right:0; background: linear-gradient(to left,  var(--gdm-cream), transparent); }
+    .carousel-wrap::after { display: none; }
 
     .carousel-viewport { overflow: hidden; width: 100%; }
 
     .carousel-track {
       display: flex;
-      gap: 20px;
+      gap: 0;                /* sin gap para efecto continuo borde a borde */
       width: max-content;
       animation: carouselScroll var(--carousel-speed) linear infinite;
     }
@@ -1459,17 +1451,16 @@
     }
 
     .carousel-item {
-      flex: 0 0 280px;
-      height: 200px;
-      border-radius: 6px;
+      flex: 0 0 350px;       /* 280px × 1.25 ≈ 350px */
+      height: 250px;         /* 200px × 1.25 = 250px */
+      border-radius: 0;      /* sin bordes redondeados para efecto continuo */
       overflow: hidden;
       position: relative;
       display: block;
       cursor: pointer;
-      box-shadow: 0 4px 18px rgba(0,0,0,.10);
       transition: transform .35s, box-shadow .35s;
     }
-    .carousel-item:hover { transform: scale(1.04) translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,.18); }
+    .carousel-item:hover { transform: scale(1.03); box-shadow: 0 14px 36px rgba(0,0,0,.22); z-index: 2; }
 
     .carousel-item .ci-bg {
       position: absolute; inset:0;
@@ -1488,19 +1479,19 @@
 
     .carousel-item .ci-logo {
       position: absolute;
-      bottom: 16px; left: 50%;
+      bottom: 20px; left: 50%;
       transform: translateX(-50%);
       z-index: 1;
-      max-height: 40px; max-width: 140px;
+      max-height: 50px; max-width: 160px;
       width: auto; object-fit: contain;
       filter: brightness(0) invert(1);
       transition: max-height .3s, transform .3s;
     }
-    .carousel-item:hover .ci-logo { max-height: 48px; transform: translateX(-50%) translateY(-4px); }
+    .carousel-item:hover .ci-logo { max-height: 60px; transform: translateX(-50%) translateY(-4px); }
 
     @media (max-width: 600px) {
-      .carousel-wrap { width: 95%; }
-      .carousel-item { flex: 0 0 200px; height: 150px; }
+      .carousel-wrap { width: 100%; }
+      .carousel-item { flex: 0 0 220px; height: 165px; }
     }
 
     /* ================================================================
@@ -1635,9 +1626,9 @@
 
       <!-- CAMBIA AQUÍ EL SUBTÍTULO / DESCRIPCIÓN DEL HERO -->
       <p class="hero-lead reveal" style="transition-delay:.16s"
-         data-es="Construimos empresas sólidas en los ramos de la hospitalidad, la gastronomía, la inmobiliaria, las franquicias y la industria. Demostramos que la excelencia también es boliviana."
-         data-en="We build solid companies in hospitality, dining, real estate, franchises and industry. We prove that excellence is also Bolivian.">
-        Construimos empresas sólidas en los ramos de la hospitalidad, la gastronomía, la inmobiliaria, las franquicias y la industria. Demostramos que la excelencia también es boliviana.
+         data-es="Construimos empresas sólidas en los rubros de hospitalidad, gastronomía, desarrollo inmobiliario, franquicias e industria. Demostramos que la excelencia no tiene fronteras."
+         data-en="We build solid companies in hospitality, dining, real estate development, franchises and industry. We prove that excellence knows no borders.">
+        Construimos empresas sólidas en los rubros de hospitalidad, gastronomía, desarrollo inmobiliario, franquicias e industria. Demostramos que la excelencia no tiene fronteras.
       </p>
 
       <!-- CAMBIA AQUÍ LOS BOTONES DE LLAMADA A ACCIÓN -->
@@ -1965,58 +1956,90 @@
       <div class="team-grid">
         <!-- FOTO: img/SDMA.jpg -->
         <div class="team-card reveal">
-          <div class="team-photo">
-            <img src="img/SDMA.jpg" alt="Samuel Doria Medina Auza">
-          </div>
+          <div class="team-photo"><img src="img/SDMA.jpg" alt="Samuel Doria Medina Auza"></div>
           <div class="team-info">
             <strong>Samuel Doria Medina Auza</strong>
             <span data-es="Presidente Ejecutivo" data-en="Executive President">Presidente Ejecutivo</span>
           </div>
         </div>
         <!-- FOTO: img/SamuelDMM.jpg -->
-        <div class="team-card reveal" style="transition-delay:.06s">
-          <div class="team-photo">
-            <img src="img/SamuelDMM.jpg" alt="Samuel Doria Medina Monje">
-          </div>
+        <div class="team-card reveal" style="transition-delay:.05s">
+          <div class="team-photo"><img src="img/SamuelDMM.jpg" alt="Samuel Doria Medina Monje"></div>
           <div class="team-info">
             <strong>Samuel Doria Medina Monje</strong>
             <span data-es="Vicepresidente Ejecutivo" data-en="Executive Vice President">Vicepresidente Ejecutivo</span>
           </div>
         </div>
         <!-- Sin foto -->
-        <div class="team-card reveal" style="transition-delay:.12s">
+        <div class="team-card reveal" style="transition-delay:.10s">
           <span class="team-initials">AG</span>
           <div class="team-info">
             <strong>Armando Gumucio</strong>
-            <span data-es="Director Estratégico Corporativo" data-en="Corporate Strategy Director">Director Estratégico Corporativo</span>
+            <span data-es="Vicepresidente Corporativo" data-en="Corporate Vice President">Vicepresidente Corporativo</span>
           </div>
         </div>
         <!-- Sin foto -->
-        <div class="team-card reveal" style="transition-delay:.06s">
+        <div class="team-card reveal" style="transition-delay:.15s">
           <span class="team-initials">GB</span>
           <div class="team-info">
             <strong>Gonzalo Belaunde</strong>
             <span data-es="Director Financiero Corporativo" data-en="Corporate Finance Director">Director Financiero Corporativo</span>
           </div>
         </div>
-        <!-- FOTO: img/AdrianDM.png -->
-        <div class="team-card reveal" style="transition-delay:.12s">
-          <div class="team-photo">
-            <img src="img/AdrianDM.png" alt="Adrián Doria Medina">
+        <!-- Sin foto -->
+        <div class="team-card reveal" style="transition-delay:.20s">
+          <span class="team-initials">PU</span>
+          <div class="team-info">
+            <strong>Patricia Urdininea</strong>
+            <span data-es="Gerente General Bolivian Foods" data-en="General Manager Bolivian Foods">Gerente General Bolivian Foods</span>
           </div>
+        </div>
+        <!-- Sin foto -->
+        <div class="team-card reveal" style="transition-delay:.25s">
+          <span class="team-initials">PB</span>
+          <div class="team-info">
+            <strong>Patricia Barroso</strong>
+            <span data-es="Gerente General Los Tajibos" data-en="General Manager Los Tajibos">Gerente General Los Tajibos</span>
+          </div>
+        </div>
+        <!-- Sin foto -->
+        <div class="team-card reveal" style="transition-delay:.30s">
+          <span class="team-initials">EE</span>
+          <div class="team-info">
+            <strong>Ezequiel Escobar</strong>
+            <span data-es="Gerente General Papa Imilla" data-en="General Manager Papa Imilla">Gerente General Papa Imilla</span>
+          </div>
+        </div>
+        <!-- Sin foto -->
+        <div class="team-card reveal" style="transition-delay:.35s">
+          <span class="team-initials">AE</span>
+          <div class="team-info">
+            <strong>Amaya Ereña</strong>
+            <span data-es="Directora de Gestión Humana" data-en="Human Resources Director">Directora de Gestión Humana</span>
+          </div>
+        </div>
+        <!-- FOTO: img/FabianDM.png -->
+        <div class="team-card reveal" style="transition-delay:.40s">
+          <div class="team-photo"><img src="img/FabianDM.png" alt="Fabián Doria Medina"></div>
+          <div class="team-info">
+            <strong>Fabián Doria Medina</strong>
+            <span data-es="Director Administrativo y Contable" data-en="Administrative and Accounting Director">Director Administrativo y Contable</span>
+          </div>
+        </div>
+        <!-- FOTO: img/AdrianDM.png -->
+        <div class="team-card reveal" style="transition-delay:.45s">
+          <div class="team-photo"><img src="img/AdrianDM.png" alt="Adrián Doria Medina"></div>
           <div class="team-info">
             <strong>Adrián Doria Medina</strong>
             <span data-es="Director de Inversiones" data-en="Investment Director">Director de Inversiones</span>
           </div>
         </div>
-        <!-- FOTO: img/FabianDM.png -->
-        <div class="team-card reveal" style="transition-delay:.18s">
-          <div class="team-photo">
-            <img src="img/FabianDM.png" alt="Fabián Doria Medina">
-          </div>
+        <!-- Sin foto -->
+        <div class="team-card reveal" style="transition-delay:.50s">
+          <span class="team-initials">GL</span>
           <div class="team-info">
-            <strong>Fabián Doria Medina</strong>
-            <span data-es="Director Administrativo y Contable" data-en="Administrative and Accounting Director">Director Administrativo y Contable</span>
+            <strong>Gabriela Loza</strong>
+            <span data-es="Directora Legal" data-en="Legal Director">Directora Legal</span>
           </div>
         </div>
       </div>
@@ -2044,98 +2067,58 @@
       </div>
     </div>
 
-    <!-- Carrusel: 80% del ancho, centrado -->
+    <!-- Carrusel: de extremo a extremo -->
     <div class="carousel-wrap reveal">
       <div class="carousel-viewport">
         <div class="carousel-track">
 
-          <!-- ══ PISTA ORIGINAL – edita aquí los items ══ -->
+          <!-- ══ PISTA ORIGINAL – 5 empresas ══ -->
           <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Los Tajibos Hotel">
-            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg"  alt="Los Tajibos Hotel" loading="lazy">
-            <img class="ci-logo" src="img/LTH.png" alt="Los Tajibos Hotel">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Jardín de Asia">
-            <img class="ci-bg"   src="img/JDA.jpg"  alt="Jardín de Asia" loading="lazy">
-            <img class="ci-logo" src="img/JDA-SIN-FONDO.png" alt="Jardín de Asia">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Nazca">
-            <img class="ci-bg"   src="img/Nazca.jpg"  alt="Nazca" loading="lazy">
-            <img class="ci-logo" src="img/LOGO_NAZCA_2.png" alt="Nazca">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Cielo Bar SCZ">
-            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"  alt="Cielo Bar SCZ" loading="lazy">
-            <img class="ci-logo" src="img/Cielo_Dorado_SCZ.png" alt="Cielo Bar SCZ">
+            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg" alt="Los Tajibos Hotel" loading="lazy">
+            <img class="ci-logo" src="img/LTH.png"               alt="Los Tajibos Hotel">
           </a>
           <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-label="Burger King">
             <img class="ci-bg"   src="img/Burger_King.jpg"  alt="Burger King" loading="lazy">
-            <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="Burger King">
+            <img class="ci-logo" src="img/BK_LOGO_RGB.png"  alt="Burger King">
           </a>
-          <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-label="Green Tower La Paz">
-            <img class="ci-bg"   src="img/GTLPZ.jpg"  alt="Green Tower La Paz" loading="lazy">
-            <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png" alt="Green Tower La Paz">
-          </a>
-          <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-label="Green Tower SCZ">
-            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"  alt="Green Tower SCZ" loading="lazy">
-            <img class="ci-logo" src="img/LOGO_COLORES_GTSCZ.png" alt="Green Tower SCZ">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Caliente">
-            <img class="ci-bg"   src="img/Caliente_lpz.jpg"  alt="Caliente" loading="lazy">
-            <img class="ci-logo" src="img/Caliente_blanco.png" alt="Caliente">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="La Terraza">
-            <img class="ci-bg"   src="img/La_TerrazaLTH.jpg"  alt="La Terraza" loading="lazy">
-            <img class="ci-logo" src="img/LA_TERRAZA_01.png" alt="La Terraza">
+          <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-label="Green Tower">
+            <img class="ci-bg"   src="img/GTLPZ.jpg"                   alt="Green Tower" loading="lazy">
+            <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png"  alt="Green Tower">
           </a>
           <a class="carousel-item" href="#" target="_blank" rel="noopener" aria-label="Papa Imilla">
-            <img class="ci-bg"   src="img/Papa_Imilla.jpg"  alt="Papa Imilla" loading="lazy">
-            <img class="ci-logo" src="img/imilla.png" alt="Papa Imilla">
+            <img class="ci-bg"   src="img/Papa_Imilla.jpg" alt="Papa Imilla" loading="lazy">
+            <img class="ci-logo" src="img/imilla.png"       alt="Papa Imilla">
           </a>
-          <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-label="Burger King Bolivia">
-            <img class="ci-bg"   src="img/Burger_King.jpg"  alt="Burger King Bolivia" loading="lazy">
-            <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="Burger King Bolivia">
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-label="Jardín de Asia">
+            <img class="ci-bg"   src="img/JDA.jpg"              alt="Jardín de Asia" loading="lazy">
+            <img class="ci-logo" src="img/JDA-SIN-FONDO.png"    alt="Jardín de Asia">
           </a>
 
           <!-- ══ CLON PARA LOOP INFINITO – no editar ══ -->
           <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/LTH.png" alt="">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/JDA.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/JDA-SIN-FONDO.png" alt="">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Nazca.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/LOGO_NAZCA_2.png" alt="">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Cielo_Bar_SCZ.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/Cielo_Dorado_SCZ.png" alt="">
+            <img class="ci-bg"   src="img/Los_Tajibos_Hotel.jpg" alt="" loading="lazy">
+            <img class="ci-logo" src="img/LTH.png"               alt="">
           </a>
           <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Burger_King.jpg"  alt="" loading="lazy">
+            <img class="ci-bg"   src="img/Burger_King.jpg" alt="" loading="lazy">
             <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="">
           </a>
           <a class="carousel-item" href="https://greentower.com.bo/la-paz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/GTLPZ.jpg"  alt="" loading="lazy">
+            <img class="ci-bg"   src="img/GTLPZ.jpg"                  alt="" loading="lazy">
             <img class="ci-logo" src="img/LOGO-GREEN-TOWER-LPZ-h.png" alt="">
           </a>
-          <a class="carousel-item" href="https://greentower.com.bo/santa-cruz" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/GT_Santa_Cruz.png"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/LOGO_COLORES_GTSCZ.png" alt="">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Caliente_lpz.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/Caliente1.png" alt="">
-          </a>
-          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/La_TerrazaLTH.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/LA_TERRAZA_01.png" alt="">
-          </a>
           <a class="carousel-item" href="#" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
-            <img class="ci-bg"   src="img/Papa_Imilla.jpg"  alt="" loading="lazy">
-            <img class="ci-logo" src="img/imilla_logo_01.png" alt="">
+            <img class="ci-bg"   src="img/Papa_Imilla.jpg" alt="" loading="lazy">
+            <img class="ci-logo" src="img/imilla.png"       alt="">
           </a>
+          <a class="carousel-item" href="https://www.lostajiboshotel.com/es" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+            <img class="ci-bg"   src="img/JDA.jpg"           alt="" loading="lazy">
+            <img class="ci-logo" src="img/JDA-SIN-FONDO.png" alt="">
+          </a>
+
+        </div><!-- /carousel-track -->
+      </div><!-- /carousel-viewport -->
+    </div><!-- /carousel-wrap -->
           <a class="carousel-item" href="https://www.burgerking.com.bo" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
             <img class="ci-bg"   src="img/Burger_King.jpg"  alt="" loading="lazy">
             <img class="ci-logo" src="img/BK_LOGO_RGB.png" alt="">
@@ -2425,6 +2408,25 @@
       });
     }
     renderTimeline();
+
+    /* Posicionar la línea de tiempo en el año 2014 al cargar
+       El usuario ve 2014 como primer año visible y explora hacia la izquierda */
+    (function scrollTo2014() {
+      const track   = document.getElementById('timeline-track');
+      const scroller = document.getElementById('timeline-scroll');
+      if (!track || !scroller) return;
+      /* Pequeño delay para que el DOM haya pintado las posiciones */
+      setTimeout(function() {
+        const items = track.querySelectorAll('.tl-item');
+        const item2014 = Array.from(items).find(el => {
+          const yr = el.querySelector('.tl-year');
+          return yr && yr.textContent.trim() === '2014';
+        });
+        if (item2014) {
+          scroller.scrollLeft = item2014.offsetLeft - 40;
+        }
+      }, 80);
+    })();
 
     /* ==============================================================
        AUTO-SCROLL DE LA LÍNEA DE TIEMPO AL PASAR EL MOUSE
